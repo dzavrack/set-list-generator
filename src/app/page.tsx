@@ -38,7 +38,7 @@ export default function Home() {
 
   return (
     <div className="relative min-h-dvh overflow-x-hidden">
-      <Backdrop home />
+      <Backdrop />
       <main className="relative z-10 mx-auto flex min-h-dvh max-w-[1320px] flex-col px-4 pt-5 pb-10 sm:px-8 sm:pt-7">
         {/* a slim bar: the brand, and a way straight back into the last book */}
         <header className="home-bar flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-line pb-4">
@@ -86,8 +86,7 @@ export default function Home() {
                     )}
                   >
                     {isLast && <span className="book-badge mb-2 font-mono text-[10px] font-bold tracking-[0.12em] text-neon-hot uppercase">Last opened</span>}
-                    <span className="look-noir font-serif text-[32px] leading-[1.02] text-ink">{g.sign}</span>
-                    <span className="not-noir sign-dim block text-[34px] leading-[1.02] break-words">{g.sign}</span>
+                    <span className="sign-dim block text-[34px] leading-[1.02] break-words">{g.sign}</span>
 
                     <span className="mt-3 line-clamp-3 text-[14px] leading-snug text-ink-2">{g.tagline}</span>
 

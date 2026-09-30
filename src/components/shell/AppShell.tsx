@@ -12,7 +12,6 @@ import { StatusBar } from "@/components/ui/Status";
 import type { Status } from "@/lib/types";
 import { cx } from "@/components/ui/cx";
 import { Backdrop } from "./Backdrop";
-import { LookSwitch } from "./LookSwitch";
 import { Brand } from "./Brand";
 import { BookSwitcher } from "./BookSwitcher";
 import { MOBILE_MORE, MOBILE_NAV, MoreIcon, NAV_SECTIONS, isActive } from "./nav";
@@ -47,63 +46,17 @@ function SortedMeter() {
     }
     return { sorted, know: counts.know, counts };
   }, [songs, rep]);
-  const pct = songs.length ? (sorted / songs.length) * 100 : 0;
   return (
     <Link href="/repertoire/" className="block rounded-xl border border-line bg-surface/60 p-3.5 backdrop-blur-sm transition-colors hover:border-line-strong">
       <div className="flex items-baseline justify-between">
         <span className="label">Sorted</span>
         <span className="tabular font-mono text-xs text-ink-2">{sorted.toLocaleString()} / {songs.length.toLocaleString()}</span>
       </div>
-      <StatusBar counts={counts} total={songs.length} className="not-noir mt-2.5 h-[3px]" />
-      <div className="look-noir mt-2.5 h-[3px] overflow-hidden rounded-full bg-surface-3">
-        <div className="tube-h h-full transition-[width] duration-500" style={{ width: `${pct}%` }} />
-      </div>
+      <StatusBar counts={counts} total={songs.length} className="mt-2.5 h-[3px]" />
       <p className="mt-2.5 text-xs text-muted">
         <span className="text-ink">{know}</span> {GENRES[genre].noun}s ready for the stand
       </p>
     </Link>
-  );
-}
-
-function Sidebar() {
-  const path = usePathname();
-  const [genre] = useGenre();
-  return (
-    <aside className="not-sleeve fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col px-4 pt-6 pb-4 lg:flex">
-      <Link href="/" className="mb-6 px-2" aria-label="The Gig Book, home">
-        <Brand sign={GENRES[genre].sign} />
-      </Link>
-      <BookSwitcher />
-      <nav aria-label="Main" className="mt-6 flex flex-1 flex-col gap-6 overflow-y-auto">
-        {NAV_SECTIONS.map((sec, i) => (
-          <div key={i} className="flex flex-col gap-0.5">
-            {sec.title && <p className="label mb-1.5 px-3">{sec.title}</p>}
-            {sec.items.map((n) => {
-              const on = isActive(path, n.href);
-              const Icon = n.icon;
-              return (
-                <Link
-                  key={n.href}
-                  href={n.href}
-                  aria-current={on ? "page" : undefined}
-                  data-tone={n.tone}
-                  className={cx(
-                    "nav-link group relative flex h-10 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors",
-                    on ? "bg-[color-mix(in_srgb,var(--ink)_7%,transparent)] text-ink" : "text-ink-2 hover:bg-[color-mix(in_srgb,var(--ink)_4%,transparent)] hover:text-ink",
-                  )}
-                >
-                  {on && <span className="tube-v absolute top-2 bottom-2 -left-4 !w-[3px]" />}
-                  <Icon className={cx("h-[18px] w-[18px] shrink-0", on ? "text-neon-hot [filter:drop-shadow(0_0_6px_var(--neon))]" : "text-muted group-hover:text-ink-2")} strokeWidth={1.75} />
-                  {n.label}
-                </Link>
-              );
-            })}
-          </div>
-        ))}
-      </nav>
-      <SortedMeter />
-      <LookSwitch className="mt-3 px-1" />
-    </aside>
   );
 }
 
@@ -114,7 +67,7 @@ const SIDES = [
 ];
 
 /**
- * Sleeve look: the book as a record. A spine in the book's colour with the title running up it,
+ * The sidebar: the book as a record. A spine in the book's colour with the title running up it,
  * and the pages listed as a tracklist, Side A and Side B.
  */
 function SleeveRail() {
@@ -122,7 +75,7 @@ function SleeveRail() {
   const [genre] = useGenre();
   const g = GENRES[genre];
   return (
-    <aside className="look-sleeve sleeve-rail fixed inset-y-0 left-0 z-30 hidden w-[256px] lg:flex">
+    <aside className="sleeve-rail fixed inset-y-0 left-0 z-30 hidden w-[256px] lg:flex">
       <div className="sleeve-spine">
         <Link href="/" aria-label="The Gig Book, home" className="spine-mark">GB</Link>
         <span className="spine-title">{g.sign}<span className="spine-sep">·</span>The Gig Book</span>
@@ -155,7 +108,6 @@ function SleeveRail() {
           ))}
         </nav>
         <SortedMeter />
-        <LookSwitch className="mt-3 px-1" />
       </div>
     </aside>
   );
@@ -191,7 +143,6 @@ function MobileTabs() {
               </Link>
             );
           })}
-          <LookSwitch className="mt-1 border-t border-line px-2 pt-2.5 pb-1" />
         </div>
       </div>
     )}
@@ -238,7 +189,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative min-h-dvh">
       <Backdrop />
-      <Sidebar />
       <SleeveRail />
       <MobileTop />
       <div className="relative z-10 lg:py-3 lg:pr-3 lg:pl-[272px]">

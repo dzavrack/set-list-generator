@@ -130,7 +130,7 @@ function Repertoire() {
         <StatCard label="Shaky" dot={statusDot.shaky} tone="shaky" value={counts.c.shaky} sub="Needs a chart" active={filter === "shaky"} onClick={() => pickFilter("shaky")} />
         <StatCard label="Want to learn" dot={statusDot.learn} tone="learn" value={counts.c.learn} sub="In the practice queue" active={filter === "learn"} onClick={() => pickFilter("learn")} />
         <StatCard label="Unsorted" value={counts.unsorted.toLocaleString()} sub={counts.c.no ? `${counts.c.no} skipped` : "Quick sort gets through them fast"} active={filter === "unsorted"} onClick={() => pickFilter("unsorted")} />
-        <StatusBar counts={counts.c} total={counts.total} className="not-noir col-span-full -mt-0.5" />
+        <StatusBar counts={counts.c} total={counts.total} className="col-span-full -mt-0.5" />
       </section>
 
       {mode === "sort" ? (

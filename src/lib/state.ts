@@ -13,24 +13,7 @@ export const KEYS = {
   practice: "practice",
   practiceLog: "practiceLog",
   seeded: "seeded",
-  look: "look",
 } as const;
-
-/**
- * The app's overall look: "sleeve" (a 1950s-60s jazz record sleeve), "marquee" (neon signs,
- * after the Set List Generator) or "noir".
- */
-export type Look = "sleeve" | "marquee" | "noir";
-export const LOOKS: { value: Look; label: string }[] = [
-  { value: "sleeve", label: "Sleeve" },
-  { value: "marquee", label: "Marquee" },
-  { value: "noir", label: "Noir" },
-];
-export const DEFAULT_LOOK: Look = "sleeve";
-
-export function useLook() {
-  return usePersistent<Look>(KEYS.look, DEFAULT_LOOK);
-}
 
 const EMPTY_REP: Repertoire = {};
 const EMPTY_SONGS: Song[] = [];
