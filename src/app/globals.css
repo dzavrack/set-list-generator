@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Jazz noir, one red neon.
+  Night-black street, a single red sign bleeding into smoke, tungsten lamplight far off.
+  Red is the only accent. Everything else is warm greys.
+*/
+:root {
+  --bg: #060405;          /* the street: behind sidebar + panel */
+  --panel: #0c0909;       /* inset content panel */
+  --surface: #120e0e;     /* cards */
+  --surface-2: #191414;   /* inputs, hover */
+  --surface-3: #221b1b;   /* active / pressed */
+  --line: rgb(255 236 228 / 0.07);
+  --line-strong: rgb(255 236 228 / 0.13);
+  --ink: #f5ede7;
+  --ink-2: #c3b6af;
+  --muted: #8d7f7a;
+  --faint: #5e5250;
+
+  --neon: #ff2b45;
+  --neon-hot: #ff5e71;
+  --neon-core: #ffe3e6;
+  --neon-deep: #9e1428;
+  --neon-glow: rgb(255 43 69 / 0.5);
+  --neon-haze: rgb(255 43 69 / 0.1);
+  --lamp: #e9a15a; /* tungsten: backdrop only, never a UI accent */
+
+  /* Repertoire statuses: one hue, different intensities */
+  --know: #ff2b45;
+  --shaky: #b8606b;
+  --learn: #d9ccc1;
+  --skip: #4f4543;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-neon: var(--neon);
+  --color-neon-hot: var(--neon-hot);
+  --color-neon-core: var(--neon-core);
+  --color-neon-deep: var(--neon-deep);
+  --color-know: var(--know);
+  --color-shaky: var(--shaky);
+  --color-learn: var(--learn);
+  --color-skip: var(--skip);
+  /* legacy aliases so older components keep compiling while they're restyled */
+  --color-bg-2: var(--surface);
+  --color-amber: var(--ink-2);
+  --color-steel: var(--muted);
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-neon: var(--font-tilt), var(--font-geist), sans-serif;
+  --font-display: var(--font-instrument), ui-serif, Georgia, serif;
+}
+
+html { background: var(--bg); }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-geist), system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection { background: var(--neon); color: #fff; }
+:focus-visible { outline: 2px solid var(--neon-hot); outline-offset: 2px; border-radius: 6px; }
+* { scrollbar-width: thin; scrollbar-color: var(--surface-3) transparent; }
+
+/* ---------- Neon ---------- */
+/* Glass tube: a hot pale core, a tight red bloom, then a wide soft haze. */
+.neon {
+  color: var(--neon-core);
+  text-shadow:
+    0 0 1px #fff,
+    0 0 3px var(--neon-hot),
+    0 0 7px var(--neon),
+    0 0 16px var(--neon),
+    0 0 34px var(--neon-glow),
+    0 0 70px rgb(255 43 69 / 0.28);
+}
+.neon-soft {
+  color: #ffd6db;
+  text-shadow: 0 0 2px var(--neon-hot), 0 0 10px var(--neon-glow), 0 0 24px rgb(255 43 69 / 0.25);
+}
+/* A lit tube as a line (dividers, active indicators) */
+.tube-h {
+  height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--neon-hot), var(--neon));
+  box-shadow: 0 0 6px var(--neon), 0 0 16px var(--neon-glow);
+}
+.tube-v {
+  width: 2px; border-radius: 2px;
+  background: linear-gradient(180deg, transparent, var(--neon-hot) 12%, var(--neon) 88%, transparent);
+  box-shadow: 0 0 6px var(--neon), 0 0 18px var(--neon-glow), 0 0 40px rgb(255 43 69 / 0.25);
+}
+.glow-ring { box-shadow: 0 0 0 1px rgb(255 43 69 / 0.55), 0 0 18px -2px var(--neon-glow); }
+
+.label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* legacy helpers still referenced by components being restyled */
+.eyebrow { font-family: var(--font-geist-mono), monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.neon-text { color: var(--neon-core); text-shadow: 0 0 2px #fff, 0 0 8px var(--neon), 0 0 22px var(--neon-glow); }
+.neon-text-sm { color: #ffd6db; text-shadow: 0 0 8px var(--neon-glow); }
+.neon-edge { border-color: rgb(255 43 69 / 0.6); box-shadow: 0 0 18px -2px var(--neon-glow); }
+.neon-rule { height: 2px; background: var(--neon); box-shadow: 0 0 8px var(--neon-glow); }
+
+/* ---------- Film ---------- */
+.grain::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@keyframes drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-3%, -4%, 0) scale(1.06); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.smoke-drift { animation: drift 38s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .smoke-drift { animation: none; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+@media print {
+  body { background: #fff; color: #000; }
+}
