@@ -2,39 +2,106 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
-  Jazz noir, one red neon.
-  Night-black street, a single red sign bleeding into smoke, tungsten lamplight far off.
-  Red is the only accent. Everything else is warm greys.
+  After-hours room lit by one neon sign. Palette from the Set List Generator reference.
+  Two independent switches, both on <html>:
+    data-genre  the book's room: colours and sign font (eight colours + one font per book)
+    data-look   the overall look: "marquee" (default) or "noir": type, shapes, backdrop
+  The base room (home page, Jazz) is orange; every other book swaps in its own below.
 */
+/* book palette (overridden per genre) */
 :root {
-  --bg: #060405;          /* the street: behind sidebar + panel */
-  --panel: #0c0909;       /* inset content panel */
-  --surface: #120e0e;     /* cards */
-  --surface-2: #191414;   /* inputs, hover */
-  --surface-3: #221b1b;   /* active / pressed */
-  --line: rgb(255 236 228 / 0.07);
-  --line-strong: rgb(255 236 228 / 0.13);
-  --ink: #f5ede7;
-  --ink-2: #c3b6af;
-  --muted: #8d7f7a;
-  --faint: #5e5250;
+  --paper: #0b0a09;
+  --card: #15130f;
+  --card2: #1c1914;
+  --rule: #312c25;
+  --ink: #efe6d6;
+  --muted: #9b907f;
+  --accent: #ff8a1f;
+  --signink: #fff1dc;
+  --sign-face: var(--font-tilt);
 
-  --neon: #ff2b45;
-  --neon-hot: #ff5e71;
-  --neon-core: #ffe3e6;
-  --neon-deep: #9e1428;
-  --neon-glow: rgb(255 43 69 / 0.5);
-  --neon-haze: rgb(255 43 69 / 0.1);
+  --neon-ink: #0b0a09; /* text on a lit accent fill */
   --lamp: #e9a15a; /* tungsten: backdrop only, never a UI accent */
 
-  /* Repertoire statuses: one hue, different intensities */
-  --know: #ff2b45;
-  --shaky: #b8606b;
-  --learn: #d9ccc1;
-  --skip: #4f4543;
+  /* repertoire statuses */
+  --know: #7fe08a;
+  --shaky: #e8c65a;
+  --learn: #6fb3d9;
+  --skip: #e0634d;
 
   color-scheme: dark;
 }
+
+/* derived from the book palette; repeated on [data-genre] so a single card can wear another book's colours */
+:root, [data-genre] {
+  /* surfaces, back to front */
+  --bg: color-mix(in srgb, var(--paper) 88%, black);   /* the street: behind sidebar + panel */
+  --panel: var(--paper);                               /* inset content panel */
+  --surface: var(--card);                              /* cards */
+  --surface-2: var(--card2);                           /* inputs, hover */
+  --surface-3: color-mix(in srgb, var(--card2) 82%, var(--ink)); /* active / pressed */
+  --line: color-mix(in srgb, var(--rule) 60%, transparent);
+  --line-strong: var(--rule);
+  --ink-2: color-mix(in srgb, var(--ink) 62%, var(--muted));
+  --faint: color-mix(in srgb, var(--muted) 58%, var(--paper));
+
+  /* the sign */
+  --neon: var(--accent);
+  --neon-hot: color-mix(in srgb, var(--accent) 78%, white);
+  --neon-core: var(--signink);
+  --neon-deep: color-mix(in srgb, var(--accent) 55%, black);
+  --neon-glow: color-mix(in srgb, var(--accent) 50%, transparent);
+  --neon-haze: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* ---------- looks: type and shape. Colour comes from the book. ---------- */
+/* Noir: serif titles, rounded cards, WebGL smoke. */
+:root {
+  --font-body: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-title: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-code: var(--font-geist-mono), ui-monospace, monospace;
+}
+/* Marquee: after the Set List Generator. Condensed caps, square edges, a striped wall, the book's own sign. */
+[data-look="marquee"] {
+  --font-body: var(--font-barlow), "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-title: var(--font-oswald), "Arial Narrow", sans-serif;
+  --font-code: var(--font-courier), "Courier New", monospace;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 3px;
+  --radius-3xl: 3px;
+  --radius-control: 2px;
+  --radius-control-sm: 1px;
+  --radius-panel: 3px;
+  --radius-chip: 2px;
+}
+
+/* Sleeve: a 1950s-60s jazz record jacket. Condensed display caps over Franklin Gothic, flat blocks
+   of the book's colour, square corners, printed card stock. No glow anywhere. */
+[data-look="sleeve"] {
+  --font-body: var(--font-franklin), "Franklin Gothic Medium", Arial, sans-serif;
+  --font-title: var(--font-anton), Impact, "Arial Narrow", sans-serif;
+  --font-code: var(--font-courier), "Courier New", monospace;
+  --radius-sm: 0; --radius-md: 0; --radius-lg: 0; --radius-xl: 0; --radius-2xl: 0; --radius-3xl: 0;
+  --radius-control: 0; --radius-control-sm: 0; --radius-panel: 0; --radius-chip: 0;
+  --sleeve-ink: #15120f; /* print ink on a colour block */
+  --bg: color-mix(in srgb, var(--paper) 72%, #2e2821); /* card stock, tinted by the book */
+}
+
+/* ---------- per-genre rooms: same layout, different light ---------- */
+[data-genre="blues"]   { --accent:#3d9bff; --paper:#070a12; --card:#0f1422; --card2:#141b2c; --rule:#232c42; --ink:#e6ecf7; --muted:#8a96ad; --signink:#e8f3ff; --sign-face:var(--font-rye); }
+[data-genre="country"] { --accent:#ff4a36; --paper:#120b07; --card:#1c130d; --card2:#241911; --rule:#3a2a1e; --ink:#f3e7d8; --muted:#a8927b; --signink:#fff0e4; --sign-face:var(--font-rye); }
+[data-genre="rock"]    { --accent:#ff2b2b; --paper:#090909; --card:#141414; --card2:#1b1b1b; --rule:#2e2e2e; --ink:#f1f1f1; --muted:#999999; --signink:#fff2f2; --sign-face:var(--font-bungee); }
+[data-genre="pop"]     { --accent:#ff3ccf; --paper:#0d0714; --card:#170e22; --card2:#1e132c; --rule:#33224a; --ink:#f6ecff; --muted:#a592bd; --signink:#ffeefb; --sign-face:var(--font-monoton); }
+[data-genre="rnb"]     { --accent:#ffb52e; --paper:#100814; --card:#1a0f20; --card2:#22142a; --rule:#3a2446; --ink:#f7ecdf; --muted:#ad96b4; --signink:#fff4dc; --sign-face:var(--font-righteous); }
+[data-genre="folk"]    { --accent:#f2c14e; --paper:#0b0f09; --card:#141a10; --card2:#1a2215; --rule:#2d3824; --ink:#efe8d6; --muted:#9da48c; --signink:#fff6de; --sign-face:var(--font-alfa); }
+[data-genre="gospel"]  { --accent:#ffd66b; --paper:#080b18; --card:#101529; --card2:#151b33; --rule:#262e50; --ink:#f1efe6; --muted:#9aa0bb; --signink:#fffbe9; --sign-face:var(--font-cinzel); }
+[data-genre="latin"]   { --accent:#ff5e3a; --paper:#12080a; --card:#1d0f12; --card2:#251418; --rule:#3d2127; --ink:#fbeee6; --muted:#b5968f; --signink:#fff1ea; --sign-face:var(--font-pacifico); }
+[data-genre="reggae"]  { --accent:#3ee07a; --paper:#07100a; --card:#0e1a12; --card2:#132218; --rule:#22382a; --ink:#eef6ec; --muted:#93aa98; --signink:#effff3; --shaky:#ffd23f; --sign-face:var(--font-bungee); }
+[data-genre="hiphop"]  { --accent:#b8ff3c; --paper:#0a0a0a; --card:#141414; --card2:#1b1b1b; --rule:#2d2d2d; --ink:#f2f2f2; --muted:#9a9a9a; --signink:#f8ffe8; --sign-face:var(--font-marker); }
+[data-genre="wedding"] { --accent:#e8c27a; --paper:#0d0b0a; --card:#171412; --card2:#1e1a17; --rule:#3a322a; --ink:#f3ece2; --muted:#a3978a; --signink:#fff6e6; --sign-face:var(--font-vibes); }
 
 @theme inline {
   --color-bg: var(--bg);
@@ -52,6 +119,7 @@
   --color-neon-hot: var(--neon-hot);
   --color-neon-core: var(--neon-core);
   --color-neon-deep: var(--neon-deep);
+  --color-neon-ink: var(--neon-ink);
   --color-know: var(--know);
   --color-shaky: var(--shaky);
   --color-learn: var(--learn);
@@ -61,24 +129,33 @@
   --color-amber: var(--ink-2);
   --color-steel: var(--muted);
 
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-neon: var(--font-tilt), var(--font-geist), sans-serif;
-  --font-display: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-title);
+  --font-mono: var(--font-code);
+  --font-neon: var(--font-tilt), var(--font-body);
+  --font-sign: var(--sign-face), var(--font-body);
+  --font-display: var(--font-title);
+}
+
+/* radii that change with the look (Marquee squares them all off) */
+@theme {
+  --radius-control: 10px;
+  --radius-control-sm: 7px;
+  --radius-panel: 22px;
+  --radius-chip: 9999px;
 }
 
 html { background: var(--bg); }
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-geist), system-ui, sans-serif;
+  font-family: var(--font-body);
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-::selection { background: var(--neon); color: #fff; }
+::selection { background: var(--neon); color: var(--neon-ink); }
 :focus-visible { outline: 2px solid var(--neon-hot); outline-offset: 2px; border-radius: 6px; }
 * { scrollbar-width: thin; scrollbar-color: var(--surface-3) transparent; }
 
@@ -92,11 +169,11 @@ body {
     0 0 7px var(--neon),
     0 0 16px var(--neon),
     0 0 34px var(--neon-glow),
-    0 0 70px rgb(255 43 69 / 0.28);
+    0 0 70px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 .neon-soft {
-  color: #ffd6db;
-  text-shadow: 0 0 2px var(--neon-hot), 0 0 10px var(--neon-glow), 0 0 24px rgb(255 43 69 / 0.25);
+  color: color-mix(in srgb, var(--signink) 80%, var(--accent));
+  text-shadow: 0 0 2px var(--neon-hot), 0 0 10px var(--neon-glow), 0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 /* A lit tube as a line (dividers, active indicators) */
 .tube-h {
@@ -107,21 +184,21 @@ body {
 .tube-v {
   width: 2px; border-radius: 2px;
   background: linear-gradient(180deg, transparent, var(--neon-hot) 12%, var(--neon) 88%, transparent);
-  box-shadow: 0 0 6px var(--neon), 0 0 18px var(--neon-glow), 0 0 40px rgb(255 43 69 / 0.25);
+  box-shadow: 0 0 6px var(--neon), 0 0 18px var(--neon-glow), 0 0 40px color-mix(in srgb, var(--accent) 25%, transparent);
 }
-.glow-ring { box-shadow: 0 0 0 1px rgb(255 43 69 / 0.55), 0 0 18px -2px var(--neon-glow); }
+.glow-ring { box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent), 0 0 18px -2px var(--neon-glow); }
 
 .label {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-code);
   font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
 }
 .tabular { font-variant-numeric: tabular-nums; }
 
 /* legacy helpers still referenced by components being restyled */
-.eyebrow { font-family: var(--font-geist-mono), monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.eyebrow { font-family: var(--font-code); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .neon-text { color: var(--neon-core); text-shadow: 0 0 2px #fff, 0 0 8px var(--neon), 0 0 22px var(--neon-glow); }
-.neon-text-sm { color: #ffd6db; text-shadow: 0 0 8px var(--neon-glow); }
-.neon-edge { border-color: rgb(255 43 69 / 0.6); box-shadow: 0 0 18px -2px var(--neon-glow); }
+.neon-text-sm { color: color-mix(in srgb, var(--signink) 80%, var(--accent)); text-shadow: 0 0 8px var(--neon-glow); }
+.neon-edge { border-color: color-mix(in srgb, var(--accent) 60%, transparent); box-shadow: 0 0 18px -2px var(--neon-glow); }
 .neon-rule { height: 2px; background: var(--neon); box-shadow: 0 0 8px var(--neon-glow); }
 
 /* ---------- Film ---------- */
@@ -137,8 +214,424 @@ body {
 }
 .smoke-drift { animation: drift 38s ease-in-out infinite; }
 
+/* ---------- tones: data-tone="know|shaky|learn|no|accent" sets --tone for hooks to use ---------- */
+[data-tone="know"]   { --tone: var(--know); }
+[data-tone="shaky"]  { --tone: var(--shaky); }
+[data-tone="learn"]  { --tone: var(--learn); }
+[data-tone="no"]     { --tone: var(--skip); }
+[data-tone="accent"] { --tone: var(--accent); }
+
+/* ============================================================================
+   Marquee look. Components carry small hook classes (btn-*, tab, stat, card-title,
+   nav-link, page-header, title-plain...) that only this block styles; Noir ignores them.
+   These rules are unlayered, so they win over Tailwind utilities without !important.
+   ============================================================================ */
+
+/* show only in one look (look-*), or in every look but one (not-*) */
+:root:not([data-look="noir"]) .look-noir,
+:root:not([data-look="marquee"]) .look-marquee,
+:root:not([data-look="sleeve"]) .look-sleeve,
+[data-look="noir"] .not-noir,
+[data-look="sleeve"] .not-sleeve { display: none; }
+
+/* the wall: diagonal stripes, a glow from the sign, grain and a vignette */
+.marquee-wall {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(1200px 520px at 88% -8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, color-mix(in srgb, var(--learn) 9%, transparent), transparent 60%),
+    repeating-linear-gradient(-14deg, color-mix(in srgb, var(--ink) 2.8%, transparent) 0 26px, transparent 26px 64px),
+    radial-gradient(ellipse at center, color-mix(in srgb, var(--paper) 82%, #2a2a2a) 0%, var(--paper) 75%);
+  background-color: var(--paper);
+}
+.marquee-wall::before {
+  content: ""; position: absolute; inset: 0; opacity: 0.09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.marquee-wall::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 180px rgb(0 0 0 / 0.85); }
+
+/* the book's sign: its own typeface, lit */
+.sign {
+  font-family: var(--sign-face), var(--font-body);
+  color: var(--signink);
+  text-shadow: 0 0 3px #fff, 0 0 9px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--neon-glow), 0 0 72px var(--neon-glow);
+}
+.sign-dim { font-family: var(--sign-face), var(--font-body); color: var(--signink); text-shadow: 0 0 10px var(--neon-glow); }
+@keyframes marquee-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.72; }
+}
+[data-look="marquee"] .sign { animation: marquee-flicker 7s infinite; }
+[data-look="marquee"] .brand-text { text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* content panel: let the wall show through, lit along the top edge like the reference's console */
+[data-look="marquee"] .app-panel {
+  background: color-mix(in srgb, var(--paper) 80%, transparent);
+  backdrop-filter: blur(2px);
+}
+@media (min-width: 1024px) {
+  [data-look="marquee"] .app-panel {
+    border-top: 2px solid var(--accent);
+    box-shadow: 0 20px 50px rgb(0 0 0 / 0.55), 0 -2px 26px color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+}
+
+/* titles: condensed caps. Song names and free text stay mixed case so long lists read easily. */
+[data-look="marquee"] .font-serif { text-transform: uppercase; letter-spacing: 0.02em; font-weight: 500; font-style: normal; }
+[data-look="marquee"] .title-plain { font-family: var(--font-body); text-transform: none; letter-spacing: 0; font-weight: 600; }
+
+[data-look="marquee"] .page-header { position: relative; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+[data-look="marquee"] .page-header::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; opacity: 0.45;
+  background: linear-gradient(90deg, transparent, var(--accent) 20%, var(--accent) 80%, transparent);
+}
+[data-look="marquee"] .page-header h1 { font-weight: 600; }
+
+[data-look="marquee"] .label { font-weight: 700; }
+[data-look="marquee"] .card-title {
+  font: 700 14px var(--font-title); letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); text-shadow: 0 0 8px var(--neon-glow);
+}
+
+/* buttons: outlined tubes. The primary one is lit. */
+[data-look="marquee"] .btn-primary {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--signink);
+  border: 1px solid var(--accent);
+  text-shadow: 0 0 6px var(--accent);
+  box-shadow: 0 0 12px var(--neon-glow), inset 0 0 10px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+[data-look="marquee"] .btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow: 0 0 20px var(--neon-glow), inset 0 0 12px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+[data-look="marquee"] .btn-secondary { background: transparent; border-color: color-mix(in srgb, var(--ink) 22%, transparent); }
+[data-look="marquee"] .btn-secondary:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); border-color: var(--ink); }
+[data-look="marquee"] .btn-danger { border-color: var(--skip); color: var(--skip); }
+[data-look="marquee"] .btn-danger:hover { background: color-mix(in srgb, var(--skip) 12%, transparent); }
+[data-look="marquee"] .btn-lg { font-family: var(--font-title); font-weight: 600; font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* tabs: boxed, caps, the selected one lit */
+[data-look="marquee"] .tabs-bar { border-bottom: 0; }
+[data-look="marquee"] .tabs-bar [role="tablist"] { gap: 8px; margin-bottom: 0; flex-wrap: wrap; }
+[data-look="marquee"] .tab {
+  font: 600 14px var(--font-title); letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 9px 18px; border: 2px solid var(--rule); color: var(--muted);
+  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+[data-look="marquee"] .tab:hover { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+[data-look="marquee"] .tab[aria-selected="true"] {
+  color: var(--signink); border-color: var(--accent); text-shadow: 0 0 8px var(--accent);
+  box-shadow: 0 0 14px var(--neon-glow), inset 0 0 10px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+[data-look="marquee"] .tab-tube { display: none; }
+
+/* stat tiles: big condensed numbers, coloured by status */
+[data-look="marquee"] .stat { background: linear-gradient(180deg, var(--card2), var(--card)); }
+[data-look="marquee"] .stat-label { font: 700 11px var(--font-code); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+[data-look="marquee"] .stat-label > .rounded-full { display: none; }
+[data-look="marquee"] .stat-value { font-family: var(--font-title); font-weight: 600; font-size: 32px; letter-spacing: 0; }
+[data-look="marquee"] .stat-sub { font-family: var(--font-code); font-size: 12px; }
+/* a tile with a tone gets its colour on the number and a lit top edge */
+[data-look="marquee"] .stat[data-tone] { border-top: 2px solid color-mix(in srgb, var(--tone) 70%, transparent); }
+[data-look="marquee"] .stat[data-tone] .stat-value { color: var(--tone); text-shadow: 0 0 12px color-mix(in srgb, var(--tone) 42%, transparent); }
+[data-look="marquee"] .stat[data-tone][aria-pressed="true"] { border-color: var(--tone); box-shadow: 0 0 16px color-mix(in srgb, var(--tone) 30%, transparent); }
+
+/* status buttons: each lights in its own colour */
+[data-look="marquee"] .status-btn[aria-pressed="true"] { box-shadow: none; }
+[data-look="marquee"] .status-btn[aria-pressed="true"][data-status="know"]  { color: var(--know);  background: color-mix(in srgb, var(--know) 12%, transparent);  box-shadow: inset 0 0 0 1px var(--know); }
+[data-look="marquee"] .status-btn[aria-pressed="true"][data-status="shaky"] { color: var(--shaky); background: color-mix(in srgb, var(--shaky) 12%, transparent); box-shadow: inset 0 0 0 1px var(--shaky); }
+[data-look="marquee"] .status-btn[aria-pressed="true"][data-status="learn"] { color: var(--learn); background: color-mix(in srgb, var(--learn) 12%, transparent); box-shadow: inset 0 0 0 1px var(--learn); }
+[data-look="marquee"] .status-btn[aria-pressed="true"][data-status="no"]    { color: var(--skip);  background: color-mix(in srgb, var(--skip) 12%, transparent);  box-shadow: inset 0 0 0 1px var(--skip); }
+
+/* sidebar */
+[data-look="marquee"] .nav-link { font: 500 14px var(--font-title); letter-spacing: 0.1em; text-transform: uppercase; }
+[data-look="marquee"] .nav-link[aria-current="page"] { color: var(--signink); text-shadow: 0 0 8px var(--neon-glow); }
+
+/* home: every book's colour at once. Each card wears its own room, like the reference's genre picker. */
+.wall-home {
+  background:
+    radial-gradient(900px 480px at 92% -6%, rgb(255 60 207 / 0.14), transparent 60%),
+    radial-gradient(800px 520px at 8% -10%, rgb(255 138 31 / 0.16), transparent 60%),
+    radial-gradient(900px 620px at -8% 105%, rgb(61 155 255 / 0.14), transparent 60%),
+    radial-gradient(800px 560px at 105% 100%, rgb(62 224 122 / 0.11), transparent 60%),
+    radial-gradient(700px 420px at 55% 55%, rgb(255 181 46 / 0.05), transparent 70%),
+    repeating-linear-gradient(-14deg, color-mix(in srgb, var(--ink) 2.8%, transparent) 0 26px, transparent 26px 64px),
+    radial-gradient(ellipse at center, color-mix(in srgb, var(--paper) 82%, #2a2a2a) 0%, var(--paper) 75%);
+  background-color: var(--paper);
+}
+[data-look="marquee"] .book-card {
+  background: radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 62%), var(--paper);
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--rule));
+  border-top: 2px solid var(--accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+[data-look="marquee"] .book-card:hover { border-color: var(--accent); box-shadow: 0 0 26px color-mix(in srgb, var(--accent) 40%, transparent); }
+[data-look="marquee"] .book-card .sign-dim { text-shadow: 0 0 2px #fff, 0 0 8px var(--accent), 0 0 18px var(--neon-glow); }
+[data-look="marquee"] .book-card:hover .sign-dim { text-shadow: 0 0 3px #fff, 0 0 10px var(--accent), 0 0 26px var(--neon-glow), 0 0 50px var(--neon-glow); }
+[data-look="marquee"] .book-card .book-count { color: color-mix(in srgb, var(--accent) 80%, var(--ink)); }
+[data-look="marquee"] .book-card .label { color: var(--accent); }
+[data-look="marquee"] .book-card .book-foot { border-color: color-mix(in srgb, var(--accent) 22%, transparent); }
+[data-look="marquee"] .book-card:hover .book-open { color: var(--signink); text-shadow: 0 0 8px var(--neon-glow); }
+[data-look="marquee"] .home-bar { border-bottom: 0; position: relative; }
+[data-look="marquee"] .home-bar::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; opacity: 0.8;
+  background: linear-gradient(90deg, #ff8a1f, #ff4a36, #ff3ccf, #3d9bff, #3ee07a, #b8ff3c, #ffd66b, #e8c27a);
+}
+
+/* ---------- colour, after the reference: statuses show everywhere ---------- */
+[data-look="marquee"] :focus-visible { outline-color: var(--learn); }
+
+/* status buttons: always in their colour, lit when chosen */
+[data-look="marquee"] .status-btn[data-status="know"]  { color: color-mix(in srgb, var(--know) 75%, var(--muted)); }
+[data-look="marquee"] .status-btn[data-status="shaky"] { color: color-mix(in srgb, var(--shaky) 75%, var(--muted)); }
+[data-look="marquee"] .status-btn[data-status="learn"] { color: color-mix(in srgb, var(--learn) 75%, var(--muted)); }
+[data-look="marquee"] .status-btn[data-status="no"]    { color: color-mix(in srgb, var(--skip) 75%, var(--muted)); }
+[data-look="marquee"] .status-btn > .rounded-full { opacity: 1; }
+[data-look="marquee"] .status-lg .status-btn { font-family: var(--font-title); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+[data-look="marquee"] .status-lg .status-btn[data-status="know"]  { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--know) 45%, transparent); }
+[data-look="marquee"] .status-lg .status-btn[data-status="shaky"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--shaky) 45%, transparent); }
+[data-look="marquee"] .status-lg .status-btn[data-status="learn"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--learn) 45%, transparent); }
+[data-look="marquee"] .status-lg .status-btn[data-status="no"]    { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--skip) 45%, transparent); }
+[data-look="marquee"] .status-lg { gap: 6px; background: transparent; border: 0; padding: 0; }
+[data-look="marquee"] .status-lg .status-btn:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+[data-look="marquee"] .qs-title { font-size: clamp(30px, 3.4vw, 46px); line-height: 1; }
+[data-look="marquee"] .status-lg .status-btn[aria-pressed="true"] { box-shadow: inset 0 0 0 2px currentColor, 0 0 16px color-mix(in srgb, currentColor 30%, transparent); }
+
+/* song rows: a lit edge and a faint wash in the song's status colour */
+[data-look="marquee"] .song-row[data-tone] {
+  box-shadow: inset 3px 0 0 var(--tone);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--tone) 7%, transparent), transparent 45%);
+}
+[data-look="marquee"] .song-row[data-tone="no"] { opacity: 0.72; }
+
+/* the sorted bar: one segment per status, each glowing */
+.status-bar { display: flex; overflow: hidden; background: var(--rule); }
+.status-bar > i { display: block; height: 100%; box-shadow: 0 0 8px currentColor; transition: width 0.4s; }
+
+/* sidebar: each section has its own colour */
+[data-look="marquee"] .nav-link[data-tone] svg { color: var(--tone); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--tone) 45%, transparent)); }
+[data-look="marquee"] .nav-link[data-tone][aria-current="page"] { background: linear-gradient(90deg, color-mix(in srgb, var(--tone) 14%, transparent), transparent); }
+[data-look="marquee"] .mobile-tab[data-tone] svg { color: color-mix(in srgb, var(--tone) 80%, var(--muted)); }
+[data-look="marquee"] .mobile-tab[data-tone][aria-current="page"] svg { color: var(--tone); filter: drop-shadow(0 0 6px var(--tone)); }
+
+/* practice: pace in colour, the week in green */
+[data-look="marquee"] .pace-chip[data-tone] { color: var(--tone); border-color: color-mix(in srgb, var(--tone) 60%, transparent); background: color-mix(in srgb, var(--tone) 10%, transparent); }
+[data-look="marquee"] .plan-card[data-tone] { border-left: 3px solid var(--tone); }
+[data-look="marquee"] .week-bar { background: linear-gradient(180deg, var(--know), color-mix(in srgb, var(--know) 55%, var(--paper))); box-shadow: 0 0 8px color-mix(in srgb, var(--know) 45%, transparent); }
+[data-look="marquee"] .rule-num { color: var(--know); }
+
+/* ============================================================================
+   Sleeve look. Same hook classes as Marquee, styled as a record jacket: the page header is
+   the cover (with the record sliding out), the sidebar is the spine and the tracklist.
+   ============================================================================ */
+.sleeve-wall {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1.5px),
+    radial-gradient(ellipse at 50% -10%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);
+  background-size: 7px 7px, 100% 100%;
+}
+.sleeve-wall::before {
+  content: ""; position: absolute; inset: 0; opacity: 0.14; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.sleeve-wall::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 220px rgb(0 0 0 / 0.65); }
+
+[data-look="sleeve"] :focus-visible { outline-color: var(--ink); }
+[data-look="sleeve"] ::selection { background: var(--accent); color: var(--sleeve-ink); }
+
+/* content sits straight on the stock */
+[data-look="sleeve"] .app-panel { background: transparent; border: 0; box-shadow: none; }
+
+/* type */
+[data-look="sleeve"] .font-serif { text-transform: uppercase; letter-spacing: 0.005em; font-weight: 400; font-style: normal; }
+[data-look="sleeve"] .title-plain { font-family: var(--font-body); text-transform: none; letter-spacing: -0.005em; font-weight: 700; }
+[data-look="sleeve"] .label { font-weight: 700; letter-spacing: 0.16em; }
+[data-look="sleeve"] .brand-text { font-family: var(--font-title); text-transform: uppercase; letter-spacing: 0.01em; color: var(--ink); text-shadow: none; }
+[data-look="sleeve"] .qs-title { font-size: clamp(32px, 3.6vw, 50px); line-height: 0.95; }
+
+/* the cover: every page header is a flat block of the book's colour with the record sliding out */
+[data-look="sleeve"] .page-header {
+  position: relative; overflow: hidden; isolation: isolate;
+  background: var(--accent); color: var(--sleeve-ink);
+  padding: 36px 22px 16px;
+  box-shadow: 5px 5px 0 rgb(0 0 0 / 0.55);
+}
+[data-look="sleeve"] .page-header > * { position: relative; z-index: 1; }
+
+[data-look="sleeve"] .page-header::before {
+  content: ""; position: absolute; z-index: 0; width: 120px; height: 120px; top: -74px; right: -48px; border-radius: 50%;
+  background:
+    radial-gradient(circle, #0b0a09 0 3%, color-mix(in srgb, var(--accent) 55%, #fff) 3.4% 29%, #0b0b0b 29.5% 32%, transparent 32.5%),
+    conic-gradient(from 40deg, transparent 0 18%, rgb(255 255 255 / 0.08) 24%, transparent 30% 68%, rgb(255 255 255 / 0.06) 74%, transparent 80%),
+    repeating-radial-gradient(circle, #1b1b1b 0 1.5px, #0a0a0a 1.5px 3px);
+  box-shadow: 0 0 0 3px #060606;
+}
+[data-look="sleeve"] .page-header::after {
+  content: var(--book-label, "THE GIG BOOK");
+  position: absolute; left: 22px; top: 14px; z-index: 1; white-space: pre;
+  font: 700 11px var(--font-code); letter-spacing: 0.2em; color: var(--sleeve-ink); opacity: 0.85;
+}
+/* keep the type clear of the record: it sits in a reserved corner, bigger on wider screens */
+[data-look="sleeve"] .page-header { padding-top: 38px; }
+@media (min-width: 640px) {
+  [data-look="sleeve"] .page-header { padding-right: 150px; }
+  [data-look="sleeve"] .page-header::before { width: 220px; height: 220px; top: -112px; right: -76px; }
+  [data-look="sleeve"] .page-header::after { content: var(--book-label, "THE GIG BOOK") "   ·   HIGH FIDELITY"; }
+}
+/* the cover already prints the book's name, so a page's own eyebrow would say it twice */
+[data-look="sleeve"] .page-header > div > .label:first-child { display: none; }
+[data-look="sleeve"] .page-header h1 {
+  color: var(--sleeve-ink); font-size: clamp(34px, 3.6vw, 50px); line-height: 0.92;
+  text-shadow: 3px 3px 0 color-mix(in srgb, var(--sleeve-ink) 16%, transparent);
+}
+[data-look="sleeve"] .page-header p,
+[data-look="sleeve"] .page-header .text-ink,
+[data-look="sleeve"] .page-header .text-ink-2,
+[data-look="sleeve"] .page-header .text-muted { color: color-mix(in srgb, var(--sleeve-ink) 82%, transparent); }
+[data-look="sleeve"] .page-header .border-line-strong { border-color: color-mix(in srgb, var(--sleeve-ink) 45%, transparent); }
+[data-look="sleeve"] .page-header :focus-visible { outline-color: var(--sleeve-ink); }
+[data-look="sleeve"] .page-header .btn-primary { background: var(--sleeve-ink); color: var(--accent); box-shadow: none; }
+[data-look="sleeve"] .page-header .btn-primary:hover { background: #000; }
+[data-look="sleeve"] .page-header .btn-secondary { background: var(--accent); color: var(--sleeve-ink); border: 2px solid var(--sleeve-ink); }
+[data-look="sleeve"] .page-header .btn-secondary:hover { background: color-mix(in srgb, var(--sleeve-ink) 12%, var(--accent)); }
+
+/* buttons: flat printed blocks with a hard offset shadow */
+[data-look="sleeve"] .btn-primary {
+  background: var(--accent); color: var(--sleeve-ink); border: 0; text-shadow: none; font-weight: 800;
+  box-shadow: 3px 3px 0 rgb(0 0 0 / 0.6);
+}
+[data-look="sleeve"] .btn-primary:hover { background: color-mix(in srgb, var(--accent) 86%, white); box-shadow: 3px 3px 0 rgb(0 0 0 / 0.6); }
+[data-look="sleeve"] .btn-primary:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgb(0 0 0 / 0.6); }
+[data-look="sleeve"] .btn-secondary { background: transparent; border: 2px solid color-mix(in srgb, var(--ink) 45%, transparent); font-weight: 700; }
+[data-look="sleeve"] .btn-secondary:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); border-color: var(--ink); }
+[data-look="sleeve"] .btn-danger { border: 2px solid var(--skip); color: var(--skip); }
+[data-look="sleeve"] .btn-lg { font-family: var(--font-body); font-weight: 800; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* tabs: a heavy rule with the chosen tab printed in reverse */
+[data-look="sleeve"] .tabs-bar { border-bottom: 3px solid var(--ink); }
+[data-look="sleeve"] .tabs-bar [role="tablist"] { gap: 0; margin-bottom: 0; }
+[data-look="sleeve"] .tab { font: 800 13px var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 18px; color: var(--muted); }
+[data-look="sleeve"] .tab:hover { color: var(--ink); }
+[data-look="sleeve"] .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+[data-look="sleeve"] .tab-tube { display: none; }
+
+/* cards */
+[data-look="sleeve"] .card-title { display: flex; align-items: center; gap: 9px; font: 800 12px var(--font-body); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); }
+[data-look="sleeve"] .card-title::before { content: ""; width: 10px; height: 10px; flex: none; background: var(--accent); }
+
+/* stat tiles: a thick colour bar on top, a big condensed number */
+[data-look="sleeve"] .stat { background: var(--surface); border: 0; border-top: 6px solid color-mix(in srgb, var(--ink) 22%, transparent); box-shadow: 4px 4px 0 rgb(0 0 0 / 0.4); }
+[data-look="sleeve"] .stat[data-tone] { border-top-color: var(--tone); }
+[data-look="sleeve"] .stat[aria-pressed="true"] { outline: 2px solid var(--tone, var(--accent)); outline-offset: -2px; }
+[data-look="sleeve"] .stat-label { font: 800 11px var(--font-body); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
+[data-look="sleeve"] .stat-label > .rounded-full { display: none; }
+[data-look="sleeve"] .stat-value { font-family: var(--font-title); font-weight: 400; font-size: 38px; letter-spacing: 0; }
+[data-look="sleeve"] .stat[data-tone] .stat-value { color: var(--tone); }
+[data-look="sleeve"] .stat-sub { font-family: var(--font-code); font-size: 12px; }
+[data-look="sleeve"] .status-bar { height: 8px; }
+[data-look="sleeve"] .status-bar > i { box-shadow: none; }
+
+/* statuses: full colour, printed solid when chosen */
+[data-look="sleeve"] .status-btn[data-status="know"]  { color: var(--know); }
+[data-look="sleeve"] .status-btn[data-status="shaky"] { color: var(--shaky); }
+[data-look="sleeve"] .status-btn[data-status="learn"] { color: var(--learn); }
+[data-look="sleeve"] .status-btn[data-status="no"]    { color: var(--skip); }
+[data-look="sleeve"] .status-btn[aria-pressed="true"] { color: var(--sleeve-ink); box-shadow: none; }
+[data-look="sleeve"] .status-btn[aria-pressed="true"][data-status="know"]  { background: var(--know);  border-color: var(--know); }
+[data-look="sleeve"] .status-btn[aria-pressed="true"][data-status="shaky"] { background: var(--shaky); border-color: var(--shaky); }
+[data-look="sleeve"] .status-btn[aria-pressed="true"][data-status="learn"] { background: var(--learn); border-color: var(--learn); }
+[data-look="sleeve"] .status-btn[aria-pressed="true"][data-status="no"]    { background: var(--skip);  border-color: var(--skip); }
+[data-look="sleeve"] .status-btn[aria-pressed="true"] > .rounded-full { background: var(--sleeve-ink); box-shadow: none; }
+[data-look="sleeve"] .status-lg { gap: 8px; background: transparent; border: 0; padding: 0; }
+[data-look="sleeve"] .status-lg .status-btn { border: 2px solid currentColor; font-weight: 800; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+@media (max-width: 639px) {
+  [data-look="sleeve"] .status-lg { gap: 6px; }
+  [data-look="sleeve"] .status-lg .status-btn { font-size: 12px; letter-spacing: 0.02em; }
+}
+[data-look="sleeve"] .status-lg .status-btn:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+
+/* the song list reads as a tracklist, each track marked in its status colour */
+[data-look="sleeve"] .song-row { border-bottom-style: dotted; border-bottom-color: var(--rule); }
+[data-look="sleeve"] .song-row[data-tone] { box-shadow: inset 6px 0 0 var(--tone); }
+[data-look="sleeve"] .song-row[data-tone="no"] { opacity: 0.7; }
+
+/* practice */
+[data-look="sleeve"] .pace-chip[data-tone] { background: var(--tone); border-color: var(--tone); color: var(--sleeve-ink); font-weight: 800; }
+[data-look="sleeve"] .plan-card[data-tone] { border-top: 8px solid var(--tone); }
+[data-look="sleeve"] .week-bar { background: var(--know); box-shadow: none; }
+[data-look="sleeve"] .tube-h { background: var(--accent); box-shadow: none; }
+[data-look="sleeve"] .rule-num { color: var(--know); }
+
+/* the rail: spine + tracklist */
+.sleeve-rail { background: color-mix(in srgb, var(--bg) 88%, black); border-right: 1px solid var(--rule); }
+.sleeve-spine {
+  width: 56px; flex: none; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 18px 0; background: var(--accent); color: var(--sleeve-ink); box-shadow: inset -4px 0 0 rgb(0 0 0 / 0.18);
+}
+.spine-mark { font: 400 18px/1 var(--font-title); border: 2px solid var(--sleeve-ink); padding: 3px 5px; }
+.spine-title {
+  flex: 1; min-height: 0; overflow: hidden; writing-mode: vertical-rl; transform: rotate(180deg);
+  font: 400 26px/1 var(--font-title); letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;
+}
+.spine-sep { margin: 12px 0; opacity: 0.55; }
+.spine-cat { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 11px var(--font-code); letter-spacing: 0.14em; }
+.sleeve-kicker { font: 700 10px var(--font-code); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.sleeve-rail-title { margin: 6px 0 16px; font: 400 36px/0.92 var(--font-title); text-transform: uppercase; color: var(--ink); overflow-wrap: anywhere; }
+.sleeve-side { padding-bottom: 5px; border-bottom: 2px solid var(--ink); font: 800 11px var(--font-body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+.sleeve-track {
+  display: flex; height: 40px; align-items: center; gap: 8px; padding: 0 6px;
+  border-bottom: 1px dotted var(--rule); font: 600 13.5px var(--font-body); color: var(--ink-2);
+  transition: background-color 0.15s, color 0.15s;
+}
+.sleeve-track:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.sleeve-track .track-no { width: 18px; flex: none; font: 700 11px var(--font-code); color: var(--muted); }
+.sleeve-track svg { color: var(--tone, var(--muted)); }
+.sleeve-track[aria-current="page"] { background: var(--ink); color: var(--bg); }
+.sleeve-track[aria-current="page"] .track-no,
+.sleeve-track[aria-current="page"] svg { color: var(--bg); }
+
+/* phones: the cover colour across the top, a heavy rule over the tabs */
+[data-look="sleeve"] .mobile-top { background: var(--accent); border-bottom: 3px solid var(--sleeve-ink); backdrop-filter: none; }
+.brand-sleeve { font: 400 26px/1 var(--font-title); text-transform: uppercase; color: var(--sleeve-ink); }
+[data-look="sleeve"] .mobile-tabs { background: var(--bg); border-top: 3px solid var(--accent); backdrop-filter: none; }
+[data-look="sleeve"] .mobile-tabs .tube-h { display: none; }
+[data-look="sleeve"] .mobile-tab[data-tone] svg { color: var(--tone); }
+[data-look="sleeve"] .mobile-tab[aria-current="page"] { background: color-mix(in srgb, var(--ink) 9%, transparent); color: var(--ink); }
+[data-look="sleeve"] .quick-action {
+  background: var(--accent); color: var(--sleeve-ink); border: 0; box-shadow: 4px 4px 0 rgb(0 0 0 / 0.6);
+  font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; backdrop-filter: none;
+}
+[data-look="sleeve"] .quick-action svg { color: var(--sleeve-ink); }
+
+/* home: the genre cards, printed. Each book name keeps its genre's typeface and colour. */
+[data-look="sleeve"] .book-grid { gap: 18px; }
+[data-look="sleeve"] .book-card {
+  background: var(--card); border: 0; border-top: 8px solid var(--accent);
+  box-shadow: 5px 5px 0 rgb(0 0 0 / 0.5); transition: transform 0.15s, box-shadow 0.15s;
+}
+[data-look="sleeve"] .book-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 rgb(0 0 0 / 0.55); background: color-mix(in srgb, var(--accent) 7%, var(--card)); }
+[data-look="sleeve"] .book-card .label { color: var(--accent); }
+[data-look="sleeve"] .book-card .sign-dim { color: var(--accent); text-shadow: 2px 2px 0 rgb(0 0 0 / 0.55); }
+[data-look="sleeve"] .book-card .book-count { color: var(--ink-2); }
+[data-look="sleeve"] .book-card .book-foot { border-top: 1px dotted var(--rule); }
+[data-look="sleeve"] .book-card .book-open { font-weight: 800; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+[data-look="sleeve"] .book-card:hover .book-open { color: var(--accent); }
+[data-look="sleeve"] .home-bar { border-bottom: 3px solid var(--ink); }
+
+/* phones: a row of stat tiles shrinks to one compact strip so the work starts on the first screen */
+@media (max-width: 639px) {
+  .stats-compact .stat { padding: 8px 9px; }
+  [data-look] .stats-compact .stat-value { margin-top: 3px; font-size: 24px; }
+  [data-look] .stats-compact .stat-label { font-size: 9.5px; letter-spacing: 0.06em; line-height: 1.15; }
+  .stats-compact .stat-sub { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .smoke-drift { animation: none; }
+  [data-look="marquee"] .sign { animation: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
 

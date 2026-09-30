@@ -70,7 +70,7 @@ export function BookSwitcher({ compact }: { compact?: boolean }) {
         aria-label={`Book: ${g.name}. Change book`}
         onClick={() => setOpen((o) => !o)}
         className={cx(
-          "flex w-full items-center gap-3 rounded-xl border border-line-strong bg-surface/70 text-left backdrop-blur-sm transition-colors hover:border-[rgb(255_236_228/0.2)] hover:bg-surface-2/80",
+          "flex w-full items-center gap-3 rounded-xl border border-line-strong bg-surface/70 text-left backdrop-blur-sm transition-colors hover:border-[color-mix(in_srgb,var(--ink)_20%,transparent)] hover:bg-surface-2/80",
           compact ? "p-1.5 pr-2.5" : "p-2.5",
         )}
       >

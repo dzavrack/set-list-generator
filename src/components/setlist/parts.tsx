@@ -33,7 +33,7 @@ export function SetListName({ value, onChange, className }: { value: string; onC
       aria-label="Set list name"
       spellCheck={false}
       className={cx(
-        "block resize-none overflow-hidden [field-sizing:content] -mx-2.5 w-[calc(100%+1.25rem)] rounded-[12px] border border-transparent bg-transparent px-2.5 py-0.5 font-serif text-[36px] leading-[1.1] tracking-[-0.01em] text-ink transition-[border-color,box-shadow,background-color] duration-150 hover:border-line focus:border-[rgb(255_43_69/0.55)] focus:bg-surface/60 focus:shadow-[0_0_0_3px_rgb(255_43_69/0.15)] focus:outline-none sm:text-[44px]",
+        "block resize-none overflow-hidden [field-sizing:content] -mx-2.5 w-[calc(100%+1.25rem)] rounded-xl border border-transparent bg-transparent px-2.5 py-0.5 font-serif text-[36px] leading-[1.1] tracking-[-0.01em] text-ink transition-[border-color,box-shadow,background-color] duration-150 hover:border-line focus:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] focus:bg-surface/60 focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_15%,transparent)] focus:outline-none sm:text-[44px]",
         className,
       )}
     />
@@ -104,7 +104,7 @@ export function SongOption({ song, status, onPick, active }: { song: Song; statu
       className={cx("flex min-h-11 w-full items-center justify-between gap-3 px-3.5 py-2 text-left transition-colors hover:bg-surface-3", active && "bg-surface-3/70")}
     >
       <span className="min-w-0">
-        <span className="block truncate font-serif text-[17px] leading-snug text-ink">{song.title}</span>
+        <span className="block truncate font-serif title-plain text-[17px] leading-snug text-ink">{song.title}</span>
         {song.artist && <span className="block truncate text-xs text-muted">{song.artist}</span>}
       </span>
       <span className={cx("flex shrink-0 items-center gap-1.5 text-xs", st ? "text-ink-2" : "text-faint")}>

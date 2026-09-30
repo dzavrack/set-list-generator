@@ -6,7 +6,7 @@ const TUBE_X = 255; // CSS px: the gap between the sidebar and the panel
 const FPS = 30;
 
 /** Full-screen WebGL backdrop. Renders at reduced resolution, 30fps, pauses when hidden. */
-export function NoirShader({ onReady }: { onReady?: () => void }) {
+export function NoirShader({ onReady, tubes = true }: { onReady?: () => void; tubes?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -47,6 +47,29 @@ export function NoirShader({ onReady }: { onReady?: () => void }) {
     const uScale = gl.getUniformLocation(prog, "uScale");
     const uTime = gl.getUniformLocation(prog, "uTime");
     const uTubeX = gl.getUniformLocation(prog, "uTubeX");
+    const uAccent = gl.getUniformLocation(prog, "uAccent");
+    const uBase = gl.getUniformLocation(prog, "uBase");
+
+    // Colours come from the theme (globals.css) and follow the open book.
+    let accent = [1, 0.16, 0.24], base = [0.022, 0.013, 0.016];
+    const readTheme = () => {
+      const css = getComputedStyle(document.documentElement);
+      const a = rgbOf(css.getPropertyValue("--accent")), p = rgbOf(css.getPropertyValue("--paper"));
+      if (a) {
+        // keep bright hues (amber, lime) from blowing out: match the luminance of the original red
+        const lum = 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+        const k = Math.min(1, 0.36 / Math.max(lum, 0.01));
+        accent = a.map((v) => v * k);
+      }
+      if (p) base = p.map((v) => v * 0.5);
+    };
+    readTheme();
+    // with reduced motion there is no loop, so repaint the still frame by hand
+    const themeWatch = new MutationObserver(() => {
+      readTheme();
+      if (still.matches) draw(performance.now());
+    });
+    themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ["data-genre"] });
 
 
     // Smoke is soft: render well under device resolution and let the browser upscale.
@@ -70,7 +93,9 @@ export function NoirShader({ onReady }: { onReady?: () => void }) {
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uScale, scale);
       gl.uniform1f(uTime, (now - start) / 1000);
-      gl.uniform1f(uTubeX, w >= 1024 ? TUBE_X : -1);
+      gl.uniform1f(uTubeX, tubes && w >= 1024 ? TUBE_X : -1);
+      gl.uniform3fv(uAccent, accent);
+      gl.uniform3fv(uBase, base);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       if (!shown) {
         shown = true;
@@ -99,6 +124,7 @@ export function NoirShader({ onReady }: { onReady?: () => void }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      themeWatch.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("resize", onResize);
       still.removeEventListener("change", kick);
@@ -118,4 +144,11 @@ export function NoirShader({ onReady }: { onReady?: () => void }) {
       style={{ opacity: visible ? 1 : 0 }}
     />
   );
+}
+
+/** "#rrggbb" to 0..1 floats; null for anything else. */
+function rgbOf(v: string): number[] | null {
+  const m = /^#([0-9a-f]{6})$/i.exec(v.trim());
+  if (!m) return null;
+  return [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16) / 255);
 }

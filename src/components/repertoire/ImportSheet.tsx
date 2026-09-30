@@ -68,7 +68,8 @@ export function ImportSheet({ open, onClose, genre, songs }: { open: boolean; on
       <SheetHeader onClose={onClose}>
         <p className="label">Paste from anywhere</p>
         <h2 className="mt-3 font-serif text-[40px] leading-none text-ink">Import a list</h2>
-        <p className="mt-3 text-sm text-ink-2">One {genre.noun} per line, or separated by commas. Keys in brackets like “(Gm)” are kept.</p>
+        <p className="mt-3 text-sm text-ink-2">Paste a set list you already play and every {genre.noun} it finds is marked Know it, so the set builder can use them straight away. You can pick a different status below.</p>
+        <p className="mt-1.5 text-sm text-muted">One {genre.noun} per line, or separated by commas. Keys in brackets like “(Gm)” are kept.</p>
       </SheetHeader>
       <div className="relative flex flex-1 flex-col gap-5 overflow-y-auto px-7 pb-7">
         {!result ? (
@@ -82,7 +83,7 @@ export function ImportSheet({ open, onClose, genre, songs }: { open: boolean; on
             />
             <div className="flex flex-wrap items-center gap-2">
               <Button variant="primary" onClick={run} disabled={!text.trim()}><Search strokeWidth={2} />Find these {genre.noun}s</Button>
-              <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-[10px] px-3 text-sm text-ink-2 hover:bg-[rgb(255_236_228/0.06)] hover:text-ink">
+              <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-control px-3 text-sm text-ink-2 hover:bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] hover:text-ink">
                 <FileText className="h-4 w-4" strokeWidth={1.75} />Open a text file
                 <input type="file" accept=".txt,.csv,.tsv,text/plain" className="sr-only" onChange={async (e) => { const f = e.target.files?.[0]; if (f) setText(await f.text()); }} />
               </label>

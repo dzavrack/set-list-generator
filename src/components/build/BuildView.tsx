@@ -37,7 +37,7 @@ import { GENRES } from "@/lib/genres";
 import { buildSetList, decadeLabel, parseGigRequest, planShape, splitStyles, TEMPO_LABELS } from "@/lib/engine";
 import { useSongs } from "@/lib/catalog";
 import { useBooks, useCustomSongs, useGenre, useRepertoire, useSetLists } from "@/lib/state";
-import { usePersistent } from "@/lib/storage";
+import { removeKey } from "@/lib/storage";
 import { useRules } from "@/lib/rules";
 import { Button, buttonBase, buttonSizes, buttonVariants } from "@/components/ui/Button";
 import { Segmented } from "@/components/ui/Segmented";
@@ -100,7 +100,7 @@ function Pills({ pills, dim }: { pills: Pill[]; dim?: boolean }) {
   return (
     <ul className={cx("flex flex-wrap gap-1.5 transition-opacity duration-150", dim && "opacity-45")}>
       {pills.map(({ key, icon: Icon, label, onRemove, removeLabel }) => (
-        <li key={key} className={cx("inline-flex h-7 max-w-full items-center gap-1.5 rounded-full border border-line-strong bg-surface-2/70 pl-2.5 text-[12.5px] text-ink-2", onRemove ? "pr-0.5" : "pr-3")}>
+        <li key={key} className={cx("inline-flex h-7 max-w-full items-center gap-1.5 rounded-chip border border-line-strong bg-surface-2/70 pl-2.5 text-[12.5px] text-ink-2", onRemove ? "pr-0.5" : "pr-3")}>
           <Icon className="h-3.5 w-3.5 shrink-0 text-muted" strokeWidth={1.75} />
           <span className="truncate">{label}</span>
           {onRemove && (
@@ -125,7 +125,7 @@ function EmptyDraft({ noun }: { noun: string }) {
   ];
   return (
     <Card className="relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute -top-40 right-[-10%] h-80 w-[70%] rounded-full bg-[radial-gradient(closest-side,rgb(255_43_69/0.13),transparent)] blur-2xl" />
+      <div aria-hidden className="pointer-events-none absolute -top-40 right-[-10%] h-80 w-[70%] rounded-full bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--accent)_13%,transparent),transparent)] blur-2xl" />
       <div className="relative flex flex-col px-6 pt-12 pb-8 sm:px-10 sm:pt-16">
         <div className="flex items-center gap-3">
           <span className="tube-h w-8" />
@@ -140,7 +140,7 @@ function EmptyDraft({ noun }: { noun: string }) {
         <ul className="mt-10 grid gap-x-8 gap-y-6 border-t border-line pt-8 sm:grid-cols-2">
           {points.map(([Icon, title, body]) => (
             <li key={title} className="flex gap-3.5">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-line-strong bg-surface-2">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-control border border-line-strong bg-surface-2">
                 <Icon className="h-4 w-4 text-ink-2" strokeWidth={1.75} />
               </span>
               <span className="min-w-0">
@@ -165,10 +165,18 @@ function NothingKnown({ noun }: { noun: string }) {
       <p className="max-w-md text-sm text-muted">
         The builder only reaches for {noun}s you can call on the bandstand. Sort a few in your repertoire and come back.
       </p>
-      <Link href="/repertoire/" className={cx(buttonBase, buttonSizes.md, buttonVariants.primary, "mt-2")}>
-        Sort your repertoire
-        <ArrowRight strokeWidth={1.75} />
-      </Link>
+      <p className="max-w-md text-sm text-ink-2">
+        Already have a set list? Paste it into <span className="text-ink">Import a list</span> on the Repertoire page and every {noun} on it is marked Know it in one go.
+      </p>
+      <div className="mt-2 flex flex-wrap justify-center gap-2">
+        <Link href="/repertoire/" className={cx(buttonBase, buttonSizes.md, buttonVariants.primary)}>
+          Sort your repertoire
+          <ArrowRight strokeWidth={1.75} />
+        </Link>
+        <Link href="/repertoire/" className={cx(buttonBase, buttonSizes.md, buttonVariants.secondary)}>
+          Import a set list
+        </Link>
+      </div>
     </Card>
   );
 }
@@ -196,9 +204,16 @@ export function BuildView() {
   const [picks, setPicks] = useState<string[]>([]);
   const [pickQ, setPickQ] = useState("");
   const [keepOrder, setKeepOrder] = useState(true);
-  const [draft, setDraft] = usePersistent<SetList | null>(`draft:${genreKey}`, null);
+  // The draft lives for this visit only: the page always opens on the empty card, and a set list
+  // appears once the player builds one. Saving it puts it in Set lists for good.
+  const [draft, setDraft] = useState<SetList | null>(null);
   /** Signature of the sets as the builder dealt them, to tell whether the player has edited since. */
-  const [builtSig, setBuiltSig] = usePersistent<string | null>(`draft-sig:${genreKey}`, null);
+  const [builtSig, setBuiltSig] = useState<string | null>(null);
+  // Tidy up drafts an earlier version kept in the browser.
+  useEffect(() => {
+    removeKey(`draft:${genreKey}`);
+    removeKey(`draft-sig:${genreKey}`);
+  }, [genreKey]);
   const [seed, setSeed] = useState(1);
   const [exporting, setExporting] = useState(false);
   const [openSong, setOpenSong] = useState<Song | null>(null);
@@ -307,7 +322,7 @@ export function BuildView() {
         description={`Describe the gig in plain words. The builder picks from the ${noun}s you know, paces the night and leaves you backups.`}
         actions={
           !loading && (
-            <Link href="/repertoire/" className="tabular inline-flex h-9 items-center gap-2 rounded-full border border-line-strong px-3.5 font-mono text-xs text-ink-2 transition-colors hover:border-[rgb(255_236_228/0.22)] hover:text-ink">
+            <Link href="/repertoire/" className="tabular inline-flex h-9 items-center gap-2 rounded-chip border border-line-strong px-3.5 font-mono text-xs text-ink-2 transition-colors hover:border-[color-mix(in_srgb,var(--ink)_22%,transparent)] hover:text-ink">
               <span className={cx("h-1.5 w-1.5 rounded-full", known ? "bg-know shadow-[0_0_8px_var(--neon)]" : "bg-skip")} />
               {known.toLocaleString()} {noun}{known === 1 ? "" : "s"} ready
             </Link>
@@ -338,7 +353,7 @@ export function BuildView() {
 
             {mode === "describe" ? (
               <form onSubmit={submitDescribe} className="flex flex-col gap-5 p-5 sm:p-6">
-                <div className="rounded-xl border border-line-strong bg-surface-2/60 transition-[border-color,box-shadow] duration-150 focus-within:border-[rgb(255_43_69/0.6)] focus-within:shadow-[0_0_0_3px_rgb(255_43_69/0.15),0_0_32px_-10px_var(--neon-glow)]">
+                <div className="rounded-xl border border-line-strong bg-surface-2/60 transition-[border-color,box-shadow] duration-150 focus-within:border-[color-mix(in_srgb,var(--accent)_60%,transparent)] focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_15%,transparent),0_0_32px_-10px_var(--neon-glow)]">
                   <div className="flex items-start gap-3 px-4 pt-4">
                     <Sparkles className="mt-1.5 h-4 w-4 shrink-0 text-neon-hot [filter:drop-shadow(0_0_6px_var(--neon))]" strokeWidth={1.75} />
                     <textarea
@@ -348,7 +363,7 @@ export function BuildView() {
                       onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitDescribe(); } }}
                       aria-label="Describe the gig"
                       placeholder={genre.chips[0]?.[1] ?? "2 hour gig Friday night"}
-                      className="min-h-[84px] w-full resize-none bg-transparent font-serif text-[20px] leading-snug text-ink placeholder:text-faint focus:outline-none focus-visible:outline-none"
+                      className="min-h-[84px] w-full resize-none bg-transparent font-serif title-plain text-[20px] leading-snug text-ink placeholder:text-faint focus:outline-none focus-visible:outline-none"
                     />
                   </div>
                   <div className="flex items-center justify-between gap-3 px-3 pt-1 pb-3 pl-4">
@@ -371,7 +386,7 @@ export function BuildView() {
                         title={prompt}
                         disabled={!canBuild}
                         onClick={() => tryChip(prompt)}
-                        className="h-8 shrink-0 rounded-full border border-line-strong px-3.5 text-[13px] text-ink-2 transition-colors hover:border-[rgb(255_236_228/0.22)] hover:text-ink disabled:opacity-40"
+                        className="h-8 shrink-0 rounded-chip border border-line-strong px-3.5 text-[13px] text-ink-2 transition-colors hover:border-[color-mix(in_srgb,var(--ink)_22%,transparent)] hover:text-ink disabled:opacity-40"
                       >
                         {label}
                       </button>
@@ -439,8 +454,8 @@ export function BuildView() {
                       {picks.map((id, i) => (
                         <li key={id} className="flex items-center gap-3 border-b border-line py-1 pr-1 pl-3.5 last:border-b-0">
                           <span className="tabular w-5 text-right font-mono text-xs text-faint">{i + 1}</span>
-                          <span className="min-w-0 flex-1 truncate font-serif text-[17px] text-ink">{byId.get(id)?.title ?? id}</span>
-                          <button type="button" aria-label={`Remove ${byId.get(id)?.title ?? id}`} onClick={() => setPicks(picks.filter((p) => p !== id))} className="grid h-10 w-10 place-items-center rounded-lg text-faint transition-colors hover:bg-[rgb(255_236_228/0.06)] hover:text-ink">
+                          <span className="min-w-0 flex-1 truncate font-serif title-plain text-[17px] text-ink">{byId.get(id)?.title ?? id}</span>
+                          <button type="button" aria-label={`Remove ${byId.get(id)?.title ?? id}`} onClick={() => setPicks(picks.filter((p) => p !== id))} className="grid h-10 w-10 place-items-center rounded-lg text-faint transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] hover:text-ink">
                             <X className="h-4 w-4" strokeWidth={1.75} />
                           </button>
                         </li>
@@ -471,7 +486,7 @@ export function BuildView() {
                 <Info className="mt-0.5 h-4 w-4 shrink-0 text-muted" strokeWidth={1.75} />
                 <p>
                   {knownLine}{" "}
-                  <Link href="/repertoire/" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-neon-hot">Sort your repertoire</Link> for better set lists.
+                  <Link href="/repertoire/" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-neon-hot">Sort your repertoire</Link> for better set lists, or paste a set list you already play into Import a list there and every {noun} on it is marked Know it.
                 </p>
               </div>
             )}

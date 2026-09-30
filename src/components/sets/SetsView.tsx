@@ -121,15 +121,17 @@ export function SetsView() {
 
       {all.length > 0 && (
         <section aria-label="Set lists at a glance" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-          <StatCard label="Saved lists" value={all.length} sub={`${genre.name} book`} />
+          <StatCard label="Saved lists" tone="accent" value={all.length} sub={`${genre.name} book`} />
           <StatCard
             label="Upcoming gigs"
+            tone="learn"
             value={stats.upcoming.length}
             sub={stats.upcoming[0] ? `Next: ${prettyDate(stats.upcoming[0].date, false)}` : "Add a date to a list"}
           />
-          <StatCard label={`${genre.noun[0].toUpperCase()}${genre.noun.slice(1)}s across lists`} value={stats.unique} sub={`${stats.slots} slots in all`} />
+          <StatCard label={`${genre.noun[0].toUpperCase()}${genre.noun.slice(1)}s across lists`} tone="shaky" value={stats.unique} sub={`${stats.slots} slots in all`} />
           <StatCard
             label="Most played"
+            tone="know"
             className="[&>span]:max-w-full"
             value={stats.top ? <span className="block truncate font-serif text-[24px] leading-[1.15] sm:text-[30px] font-normal tracking-normal">{stats.top.title}</span> : "—"}
             sub={stats.top ? `In ${stats.top.n} of ${all.length} list${all.length === 1 ? "" : "s"}` : undefined}
@@ -187,14 +189,14 @@ function SetListCard({ sl, upcoming, onOpen }: { sl: SetList; upcoming: boolean;
               <span className="truncate">{sl.venue}</span>
             </span>
           )}
-          <span className="mt-1 line-clamp-2 font-serif text-[15px] leading-snug text-muted [mask-image:linear-gradient(90deg,#000_55%,transparent)]">
+          <span className="mt-1 line-clamp-2 font-serif title-plain text-[15px] leading-snug text-muted [mask-image:linear-gradient(90deg,#000_55%,transparent)]">
             {titles.slice(0, 7).join(" · ")}
           </span>
         </div>
         <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-line px-5 py-3.5">
           <span className="flex flex-wrap gap-1.5">
             {sl.sets.map((s, i) => (
-              <span key={i} className="tabular inline-flex h-6 items-center rounded-md bg-[rgb(255_236_228/0.05)] px-2 font-mono text-[11px] text-ink-2">
+              <span key={i} className="tabular inline-flex h-6 items-center rounded-md bg-[color-mix(in_srgb,var(--ink)_5%,transparent)] px-2 font-mono text-[11px] text-ink-2">
                 {sl.sets.length > 1 ? `S${i + 1} · ` : ""}{s.items.length}
               </span>
             ))}
@@ -260,7 +262,7 @@ function SetListDetail({
 
           <div className="flex flex-wrap items-center gap-2 lg:pt-8">
             {confirming ? (
-              <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[rgb(255_43_69/0.35)] bg-[rgb(255_43_69/0.06)] py-1.5 pr-1.5 pl-3.5">
+              <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] py-1.5 pr-1.5 pl-3.5">
                 <span className="text-[13px] text-ink">Delete this set list for good?</span>
                 <Button variant="danger" size="sm" onClick={onDelete}><Trash2 strokeWidth={1.75} />Delete</Button>
                 <Button variant="ghost" size="sm" onClick={() => setConfirming(false)}>Cancel</Button>

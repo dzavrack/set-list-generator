@@ -76,13 +76,13 @@ export function UpNext({
           {shown.map((it, idx) => {
             const on = it.songId === selectedId;
             return (
-              <li key={it.songId} className={cx("group relative flex items-center border-b border-line transition-colors", on ? "bg-[rgb(255_236_228/0.05)]" : "hover:bg-[rgb(255_236_228/0.025)]")}>
+              <li key={it.songId} className={cx("group relative flex items-center border-b border-line transition-colors", on ? "bg-[color-mix(in_srgb,var(--ink)_5%,transparent)]" : "hover:bg-[color-mix(in_srgb,var(--ink)_2%,transparent)]")}>
                 {on && <span aria-hidden className="tube-v absolute top-2.5 bottom-2.5 left-0 !w-[3px]" />}
                 <button type="button" aria-pressed={on} onClick={() => onSelect(it.songId)} className="flex min-w-0 flex-1 items-start gap-3.5 py-3.5 pr-2 pl-5 text-left sm:pl-6">
                   <span aria-hidden className={cx("mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full", it.status ? statusDot[it.status] : "bg-faint")} />
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center gap-2">
-                      <span className={cx("min-w-0 truncate font-serif text-[21px] leading-tight", on ? "text-white" : "text-ink")}>{it.title}</span>
+                      <span className={cx("min-w-0 truncate font-serif title-plain text-[21px] leading-tight", on ? "text-white" : "text-ink")}>{it.title}</span>
                       {idx === 0 && <StyleTag active>Next</StyleTag>}
                     </span>
                     <span className="mt-0.5 block truncate text-[13px] text-muted">{it.reason}</span>
@@ -129,7 +129,7 @@ export function UpNext({
         </button>
       )}
 
-      <div className={cx("relative border-b border-line transition-colors", general ? "bg-[rgb(255_236_228/0.05)]" : "hover:bg-[rgb(255_236_228/0.025)]")}>
+      <div className={cx("relative border-b border-line transition-colors", general ? "bg-[color-mix(in_srgb,var(--ink)_5%,transparent)]" : "hover:bg-[color-mix(in_srgb,var(--ink)_2%,transparent)]")}>
         {general && <span aria-hidden className="tube-v absolute top-2.5 bottom-2.5 left-0 !w-[3px]" />}
         <button type="button" aria-pressed={general} onClick={() => onSelect(null)} className="flex w-full items-center gap-3.5 px-5 py-3.5 text-left sm:px-6">
           <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-line-strong bg-surface-2">
@@ -155,7 +155,7 @@ export function UpNext({
           <ul className="px-5 pb-4 sm:px-6">
             {learned.map((l) => (
               <li key={l.songId} className="flex items-baseline justify-between gap-3 py-1.5">
-                <span className="truncate font-serif text-[17px] text-ink-2">{l.title}</span>
+                <span className="truncate font-serif title-plain text-[17px] text-ink-2">{l.title}</span>
                 {l.doneDate && <span className="tabular shrink-0 font-mono text-[11px] text-faint">{shortDate(l.doneDate)}</span>}
               </li>
             ))}
@@ -184,7 +184,7 @@ function AddSong({ songs, noun, onAdd }: { songs: Song[]; noun: string; onAdd: (
         />
       </div>
       {results.length > 0 && (
-        <ul className="mt-2 overflow-hidden rounded-[10px] border border-line-strong bg-surface-2" aria-label="Search results">
+        <ul className="mt-2 overflow-hidden rounded-control border border-line-strong bg-surface-2" aria-label="Search results">
           {results.map((s) => (
             <li key={s.id} className="border-b border-line last:border-0">
               <button
@@ -196,7 +196,7 @@ function AddSong({ songs, noun, onAdd }: { songs: Song[]; noun: string; onAdd: (
                 className="group flex min-h-11 w-full items-center gap-3 px-3.5 py-2 text-left transition-colors hover:bg-surface-3"
               >
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-serif text-[17px] leading-tight text-ink">{s.title}</span>
+                  <span className="block truncate font-serif title-plain text-[17px] leading-tight text-ink">{s.title}</span>
                   {(s.artist || s.year) && <span className="block truncate text-xs text-muted">{[s.artist, s.year].filter(Boolean).join(" · ")}</span>}
                 </span>
                 <Plus className="h-4 w-4 shrink-0 text-muted group-hover:text-neon-hot" strokeWidth={1.75} />

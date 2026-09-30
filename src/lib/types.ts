@@ -43,11 +43,39 @@ export interface Song {
   custom?: boolean;
 }
 
+/** A recording of a tune, as listed under "About this tune". */
+export interface Recording {
+  artist: string;
+  year?: number;
+  /** e.g. "as Ko-Ko" for a contrafact, or which album */
+  note?: string;
+  /** true when a cited source (Wikipedia's recordings list) names this recording */
+  confirmed?: boolean;
+}
+
+/**
+ * Background on a catalog tune: who wrote it, where it came from, the first and the landmark
+ * recordings. Loaded per genre on demand (src/data/info/<genre>.json), built by scripts/research.
+ */
+export interface SongInfo {
+  composer?: string;
+  lyricist?: string;
+  year?: number;
+  /** The show or film it was written for */
+  origin?: string;
+  originKind?: "show" | "film";
+  firstRecording?: Recording;
+  famous?: Recording[];
+  links?: { wikipedia?: string; wikidata?: string };
+  /** Fields filled in from general knowledge rather than a cited source; shown as "unverified" */
+  unverified?: ("composer" | "lyricist" | "year" | "origin" | "firstRecording")[];
+}
+
 export interface GenreConfig {
   key: GenreKey;
   /** e.g. "Jazz" */
   name: string;
-  /** Neon sign text, e.g. "Jazz Gig Book" */
+  /** Neon sign text: the book's title, e.g. "Jazz Book" */
   sign: string;
   /** "tune" for jazz, "song" elsewhere */
   noun: "tune" | "song";

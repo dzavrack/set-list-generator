@@ -10,15 +10,19 @@ import { statusDot, statusText } from "@/components/ui/Status";
 import { PACE_LABEL, PLAN_LENGTHS, promoteStatus, type PaceState, type PlanInfo } from "@/lib/practice";
 import { STATUSES, type Status } from "@/lib/types";
 import { fmtMin } from "./TimerPanel";
+import type { Tone } from "@/components/ui/tone";
 
 /** Pace chips stay neutral unless something needs you: red when ready or overdue, dusty rose when behind. */
+/** Marquee colours pace like the reference: green when you're there, blue on track, red behind. */
+const paceColour: Record<PaceState, Tone> = { done: "know", ready: "know", ahead: "know", ontrack: "learn", behind: "no", overdue: "no" };
+
 const paceTone: Record<PaceState, string> = {
   done: "border-line-strong text-ink",
-  ready: "border-[rgb(255_43_69/0.55)] text-neon-hot bg-[rgb(255_43_69/0.08)]",
+  ready: "border-[color-mix(in_srgb,var(--accent)_55%,transparent)] text-neon-hot bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]",
   ahead: "border-line-strong text-ink",
   ontrack: "border-line-strong text-ink-2",
   behind: "border-[rgb(184_96_107/0.5)] text-shaky",
-  overdue: "border-[rgb(255_43_69/0.55)] text-neon-hot",
+  overdue: "border-[color-mix(in_srgb,var(--accent)_55%,transparent)] text-neon-hot",
 };
 
 const START_LENGTHS = [7, 14, 30] as const;
@@ -49,7 +53,7 @@ export function PlanPanel(p: PlanPanelProps) {
   const info = p.info;
 
   return (
-    <Card role="region" aria-labelledby="plan-h">
+    <Card role="region" aria-labelledby="plan-h" data-tone={info ? paceColour[info.state] : undefined} className="plan-card">
       <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4 sm:px-6">
         <div className="min-w-0">
           <h2 id="plan-h" className="label">{info ? "Learning plan" : `This ${p.noun}`}</h2>
@@ -57,7 +61,7 @@ export function PlanPanel(p: PlanPanelProps) {
           {p.sub && <p className="mt-0.5 truncate text-[13px] text-muted">{p.sub}</p>}
         </div>
         {statusLabel && p.status && (
-          <span className={cx("mt-0.5 inline-flex h-7 shrink-0 items-center gap-2 rounded-full border border-line-strong px-3 text-xs font-medium", statusText[p.status])}>
+          <span className={cx("mt-0.5 inline-flex h-7 shrink-0 items-center gap-2 rounded-chip border border-line-strong px-3 text-xs font-medium", statusText[p.status])}>
             <span className={cx("h-1.5 w-1.5 rounded-full", statusDot[p.status])} />
             {statusLabel}
           </span>
@@ -89,7 +93,7 @@ export function PlanPanel(p: PlanPanelProps) {
         <>
           <div className="flex flex-col gap-3 px-5 pt-5 sm:px-6">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[13px] text-muted">
-              <span className={cx("inline-flex h-6 items-center rounded-full border px-2.5 text-xs font-medium", paceTone[info.state])}>{PACE_LABEL[info.state]}</span>
+              <span data-tone={paceColour[info.state]} className={cx("pace-chip inline-flex h-6 items-center rounded-chip border px-2.5 text-xs font-medium", paceTone[info.state])}>{PACE_LABEL[info.state]}</span>
               <span className="tabular">
                 {info.daysLeft < 0
                   ? `${-info.daysLeft} day${info.daysLeft === -1 ? "" : "s"} overdue`
@@ -125,15 +129,15 @@ export function PlanPanel(p: PlanPanelProps) {
           <ol className="mt-3 flex flex-col px-2.5 sm:px-3.5" aria-label="Steps">
             {info.plan.steps.map((s, i) => (
               <li key={i}>
-                <label className="group flex min-h-11 cursor-pointer items-center gap-3.5 rounded-[10px] px-2.5 py-2 transition-colors hover:bg-[rgb(255_236_228/0.03)]">
+                <label className="group flex min-h-11 cursor-pointer items-center gap-3.5 rounded-control px-2.5 py-2 transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_3%,transparent)]">
                   <input type="checkbox" checked={s.done} onChange={() => p.onToggleStep(i)} className="peer sr-only" />
                   <span
                     aria-hidden
                     className={cx(
                       "grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-neon-hot",
                       s.done
-                        ? "border-[rgb(255_43_69/0.6)] bg-[rgb(255_43_69/0.14)] text-neon-hot"
-                        : "border-line-strong bg-surface-2 text-transparent group-hover:border-[rgb(255_236_228/0.24)]",
+                        ? "border-[color-mix(in_srgb,var(--accent)_60%,transparent)] bg-[color-mix(in_srgb,var(--accent)_14%,transparent)] text-neon-hot"
+                        : "border-line-strong bg-surface-2 text-transparent group-hover:border-[color-mix(in_srgb,var(--ink)_24%,transparent)]",
                     )}
                   >
                     <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
@@ -146,11 +150,11 @@ export function PlanPanel(p: PlanPanelProps) {
           </ol>
 
           {info.progress >= 1 && (
-            <div className="mx-5 mt-4 rounded-xl border border-[rgb(255_43_69/0.4)] bg-[rgb(255_43_69/0.05)] p-4 sm:mx-6">
+            <div className="mx-5 mt-4 rounded-xl border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] bg-[color-mix(in_srgb,var(--accent)_5%,transparent)] p-4 sm:mx-6">
               <p className="font-serif text-[24px] leading-tight text-ink">All steps done</p>
               <p className="mt-1 text-sm text-ink-2">Move it up your list so the set builder can reach for it.</p>
               <div className="mt-3.5 flex flex-wrap gap-2">
-                <Button onClick={() => p.onPromote("know")} className="border-[rgb(255_43_69/0.55)]">
+                <Button onClick={() => p.onPromote("know")} className="border-[color-mix(in_srgb,var(--accent)_55%,transparent)]">
                   <Check strokeWidth={2} />
                   Mark as Know it
                 </Button>

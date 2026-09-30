@@ -28,8 +28,8 @@ export function GigForm({ req, onChange, genre, books, songs, rep }: { req: GigR
                 aria-pressed={on}
                 onClick={() => set("styles", on ? req.styles.filter((s) => s !== code) : [...req.styles, code])}
                 className={cx(
-                  "h-8 rounded-full border px-3 text-[13px] transition-colors",
-                  on ? "border-[rgb(255_43_69/0.6)] bg-[rgb(255_43_69/0.1)] text-ink shadow-[0_0_16px_-6px_var(--neon-glow)]" : "border-line-strong text-ink-2 hover:border-[rgb(255_236_228/0.22)] hover:text-ink",
+                  "h-8 rounded-chip border px-3 text-[13px] transition-colors",
+                  on ? "border-[color-mix(in_srgb,var(--accent)_60%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] text-ink shadow-[0_0_16px_-6px_var(--neon-glow)]" : "border-line-strong text-ink-2 hover:border-[color-mix(in_srgb,var(--ink)_22%,transparent)] hover:text-ink",
                 )}
               >
                 {label}
@@ -124,7 +124,7 @@ function LeaveOut({ req, onChange, genre, songs, rep }: { req: GigRequest; onCha
       {ex.length > 0 && (
         <ul className="flex flex-wrap gap-1.5">
           {ex.map((id) => (
-            <li key={id} className="inline-flex h-8 items-center gap-1 rounded-full border border-line-strong bg-surface-2/70 pr-1 pl-3 text-[13px] text-ink-2">
+            <li key={id} className="inline-flex h-8 items-center gap-1 rounded-chip border border-line-strong bg-surface-2/70 pr-1 pl-3 text-[13px] text-ink-2">
               <span className="max-w-[22ch] truncate">{byId.get(id)?.title ?? id}</span>
               <button type="button" aria-label={`Allow ${byId.get(id)?.title ?? id} again`} onClick={() => onChange({ ...req, exclude: ex.filter((x) => x !== id) })} className="grid h-6 w-6 place-items-center rounded-full text-muted transition-colors hover:bg-surface-3 hover:text-ink">
                 <X className="h-3.5 w-3.5" strokeWidth={1.75} />

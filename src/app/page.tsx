@@ -6,21 +6,22 @@ import { GENRES } from "@/lib/genres";
 import { GENRE_ORDER, type GenreKey } from "@/lib/types";
 import { KEYS, useGenre } from "@/lib/state";
 import { usePersistent } from "@/lib/storage";
-import { NoirBackdrop } from "@/components/shell/NoirBackdrop";
+import { Backdrop } from "@/components/shell/Backdrop";
 import { Brand } from "@/components/shell/Brand";
 import { GENRE_COUNTS } from "@/components/shell/BookSwitcher";
-import { Button, buttonBase, buttonSizes, buttonVariants } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { cx } from "@/components/ui/cx";
 
 const TOTAL = Object.values(GENRE_COUNTS).reduce((a, b) => a + b, 0);
+/** Tempo buckets every non-jazz book shares; the preview shows the book's own styles instead. */
+const SHARED_STYLES = new Set(["bl", "up", "pa"]);
 
-function Monogram({ k }: { k: GenreKey }) {
-  const letters = GENRES[k].name.replace(/[^A-Za-z&]/g, "").slice(0, 2);
-  return (
-    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border border-line-strong bg-surface-2 font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase transition-colors group-hover:border-[rgb(255_236_228/0.2)] group-hover:text-ink">
-      {letters}
-    </span>
-  );
+/** A few of the book's styles, as a taste of what's inside. */
+function stylePreview(k: GenreKey, n = 4) {
+  return Object.entries(GENRES[k].styles)
+    .filter(([code]) => k === "jazz" || !SHARED_STYLES.has(code))
+    .slice(0, n)
+    .map(([, label]) => label);
 }
 
 export default function Home() {
@@ -37,56 +38,39 @@ export default function Home() {
 
   return (
     <div className="relative min-h-dvh overflow-x-hidden">
-      <NoirBackdrop />
-      <main className="relative z-10 mx-auto flex min-h-dvh max-w-[1440px] flex-col px-4 pt-8 pb-12 sm:px-8 sm:pt-12 lg:pr-14 lg:pl-[320px]">
-        <header className="flex items-center justify-between gap-4">
-          <Brand size="lg" />
-          {lastGenre && (
-            <Link href="/repertoire/" className="hidden items-center gap-1.5 text-sm text-ink-2 transition-colors hover:text-ink sm:inline-flex">
-              Open the app
-              <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
-            </Link>
-          )}
-        </header>
-
-        <section className="mt-16 max-w-3xl sm:mt-24 lg:mt-28">
-          <p className="label">A set list builder for working musicians</p>
-          <h1 className="mt-5 font-serif text-[52px] leading-[0.95] tracking-[-0.015em] text-ink sm:text-[80px] xl:text-[92px]">
-            Walk on with a set <br className="hidden sm:block" />
-            <span className="text-ink-2 italic">that flows.</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-ink-2 sm:text-[17px]">
-            Mark the songs you can call, tell it about the gig, and get a running order ready for the stand.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
-            {lastGenre ? (
-              <Button variant="primary" size="lg" onClick={() => open(lastGenre)}>
-                Continue with {GENRES[lastGenre].name}
-                <ArrowRight strokeWidth={2} />
-              </Button>
-            ) : (
-              <a href="#books" className={cx(buttonBase, buttonSizes.lg, buttonVariants.primary)}>
-                Pick your book
-                <ArrowRight strokeWidth={2} />
-              </a>
-            )}
-            <span className="inline-flex items-center gap-2 text-[13px] text-muted">
+      <Backdrop home />
+      <main className="relative z-10 mx-auto flex min-h-dvh max-w-[1320px] flex-col px-4 pt-5 pb-10 sm:px-8 sm:pt-7">
+        {/* a slim bar: the brand, and a way straight back into the last book */}
+        <header className="home-bar flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-line pb-4">
+          <Brand />
+          <div className="flex items-center gap-4">
+            <span className="hidden items-center gap-2 text-[13px] text-muted md:inline-flex">
               <Lock className="h-3.5 w-3.5" strokeWidth={1.75} />
               No account. Everything stays in this browser.
             </span>
+            {lastGenre && (
+              <span data-genre={lastGenre} className="contents">
+                <Button variant="primary" onClick={() => open(lastGenre)}>
+                  Continue with {GENRES[lastGenre].sign}
+                  <ArrowRight strokeWidth={2} />
+                </Button>
+              </span>
+            )}
           </div>
-        </section>
+        </header>
 
-        <section id="books" aria-labelledby="books-title" className="mt-20 scroll-mt-8 sm:mt-28">
-          <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-line pb-4">
-            <h2 id="books-title" className="font-serif text-[32px] leading-none text-ink">
-              {lastGenre ? "Or open another book" : "Pick your book"}
-            </h2>
+        <section aria-labelledby="books-title" className="mt-7 sm:mt-9">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+            <div>
+              <h1 id="books-title" className="font-serif text-[40px] leading-none text-ink sm:text-[52px]">Pick a book</h1>
+              <p className="mt-2 text-[15px] text-ink-2">Each one has its own songs, set lists and rules. Mark what you know, then build the night.</p>
+            </div>
             <span className="tabular font-mono text-xs text-muted">
               {GENRE_ORDER.length} books · {TOTAL.toLocaleString()} songs
             </span>
           </div>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+
+          <ul className="book-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {GENRE_ORDER.map((k) => {
               const g = GENRES[k];
               const isLast = k === lastGenre;
@@ -94,22 +78,35 @@ export default function Home() {
                 <li key={k}>
                   <button
                     type="button"
+                    data-genre={k}
                     onClick={() => open(k)}
                     className={cx(
-                      "group flex h-full w-full items-start gap-4 rounded-2xl border bg-surface/80 p-4 text-left backdrop-blur-sm transition-colors duration-150 sm:p-5",
-                      isLast ? "border-[rgb(255_43_69/0.55)]" : "border-line hover:border-line-strong hover:bg-surface-2/80",
+                      "book-card group flex h-full min-h-[236px] w-full flex-col rounded-2xl border bg-surface/80 p-5 text-left backdrop-blur-sm transition-colors duration-150",
+                      isLast ? "border-[color-mix(in_srgb,var(--accent)_55%,transparent)]" : "border-line hover:border-line-strong hover:bg-surface-2/80",
                     )}
                   >
-                    <Monogram k={k} />
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-baseline justify-between gap-3">
-                        <span className="truncate font-serif text-[24px] leading-tight text-ink">{g.name}</span>
-                        <ArrowRight className="h-4 w-4 shrink-0 translate-y-[-1px] text-muted opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100" strokeWidth={1.75} />
+                    {isLast && <span className="book-badge mb-2 font-mono text-[10px] font-bold tracking-[0.12em] text-neon-hot uppercase">Last opened</span>}
+                    <span className="look-noir font-serif text-[32px] leading-[1.02] text-ink">{g.sign}</span>
+                    <span className="not-noir sign-dim block text-[34px] leading-[1.02] break-words">{g.sign}</span>
+
+                    <span className="mt-3 line-clamp-3 text-[14px] leading-snug text-ink-2">{g.tagline}</span>
+
+                    <span className="mt-4 flex flex-wrap gap-1.5">
+                      {stylePreview(k).map((s) => (
+                        <span key={s} className="book-style inline-flex h-6 items-center rounded-md bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] px-2 text-[11.5px] text-[color-mix(in_srgb,var(--accent)_75%,var(--ink))]">
+                          {s}
+                        </span>
+                      ))}
+                    </span>
+
+                    <span className="book-foot mt-auto flex items-center justify-between gap-3 border-t border-line pt-3.5">
+                      <span className="book-count tabular font-mono text-[11px] text-muted">
+                        {GENRE_COUNTS[k].toLocaleString()} {g.noun}s
                       </span>
-                      <span className="tabular mt-0.5 block font-mono text-[11px] text-muted">
-                        {GENRE_COUNTS[k].toLocaleString()} {g.noun}s{isLast && <span className="text-neon-hot"> · last opened</span>}
+                      <span className="book-open inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink-2 transition-colors group-hover:text-ink">
+                        {isLast ? "Continue" : "Open"}
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
                       </span>
-                      <span className="mt-2 line-clamp-2 block text-[13px] leading-snug text-muted">{g.tagline}</span>
                     </span>
                   </button>
                 </li>
@@ -118,7 +115,7 @@ export default function Home() {
           </ul>
         </section>
 
-        <footer className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-16 text-xs text-faint">
+        <footer className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-12 text-xs text-faint">
           <span>The Gig Book · made for the bandstand</span>
           <Link href="/backup/" className="inline-flex items-center gap-1.5 transition-colors hover:text-ink-2">
             <DatabaseBackup className="h-3.5 w-3.5" strokeWidth={1.75} />

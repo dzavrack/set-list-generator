@@ -58,8 +58,8 @@ export function BackupView() {
       />
 
       <section aria-label="What's stored" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <StatCard label="Songs sorted" dot={statusDot.know} value={stats.sorted.toLocaleString()} sub={`${stats.know.toLocaleString()} ready for the stand`} />
-        <StatCard label="Set lists saved" value={setLists.length} sub={stats.last ? `Last on ${shortDate(stats.last)}` : "None saved yet"} />
+        <StatCard label="Songs sorted" dot={statusDot.know} tone="know" value={stats.sorted.toLocaleString()} sub={`${stats.know.toLocaleString()} ready for the stand`} />
+        <StatCard label="Set lists saved" tone="accent" value={setLists.length} sub={stats.last ? `Last on ${shortDate(stats.last)}` : "None saved yet"} />
         <StatCard label="Your own songs" value={custom.length} sub={books.length ? `Plus ${books.length} imported ${books.length === 1 ? "list" : "lists"}` : "Added by hand or imported"} />
         <StatCard label="Practice sessions" value={log.length} sub={stats.minutes ? `${formatMinutes(stats.minutes)} in the woodshed` : "Nothing logged yet"} />
       </section>
@@ -136,7 +136,7 @@ function RestoreCard() {
       <CardHeader title="Restore from a file" description="Bring back a saved backup. Backups from the old Set List Generator work too." />
       <div className="flex flex-1 flex-col gap-5 px-6 py-5">
         {pending ? (
-          <div className="flex flex-col gap-4 rounded-xl border border-[rgb(255_43_69/0.35)] bg-[rgb(255_43_69/0.05)] px-4 py-4">
+          <div className="flex flex-col gap-4 rounded-xl border border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_5%,transparent)] px-4 py-4">
             <div className="flex items-start gap-3">
               <ShieldAlert className="mt-0.5 h-[18px] w-[18px] shrink-0 text-neon-hot" strokeWidth={1.75} />
               <div className="min-w-0 text-sm">
@@ -172,7 +172,7 @@ function RestoreCard() {
             }}
             className={cx(
               "flex items-center gap-3.5 rounded-xl border border-dashed px-4 py-3 transition-colors",
-              over ? "border-[rgb(255_43_69/0.55)] bg-[rgb(255_43_69/0.05)]" : "border-line-strong",
+              over ? "border-[color-mix(in_srgb,var(--accent)_55%,transparent)] bg-[color-mix(in_srgb,var(--accent)_5%,transparent)]" : "border-line-strong",
             )}
           >
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-line-strong bg-surface">
@@ -219,7 +219,7 @@ function DangerCard() {
   const ok = typed.trim().toLowerCase() === CONFIRM_PHRASE;
 
   return (
-    <Card className="border-[rgb(255_43_69/0.18)] bg-surface/50">
+    <Card className="border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-surface/50">
       <div className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <p className="label mb-1.5">Danger zone</p>

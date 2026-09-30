@@ -3,7 +3,7 @@ import { ChevronsUpDown } from "lucide-react";
 import { cx } from "./cx";
 
 export const inputClass =
-  "w-full h-10 rounded-[10px] border border-line-strong bg-surface px-3.5 text-sm text-ink placeholder:text-faint transition-colors hover:border-[rgb(255_236_228/0.2)] focus:border-[rgb(255_43_69/0.6)] focus:outline-none focus:shadow-[0_0_0_3px_rgb(255_43_69/0.15)]";
+  "w-full h-10 rounded-control border border-line-strong bg-surface px-3.5 text-sm text-ink placeholder:text-faint transition-colors hover:border-[color-mix(in_srgb,var(--ink)_20%,transparent)] focus:border-[color-mix(in_srgb,var(--accent)_60%,transparent)] focus:outline-none focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_15%,transparent)]";
 
 export function Field({ label, hint, children, className }: { label: string; hint?: string; children: React.ReactNode; className?: string }) {
   return (

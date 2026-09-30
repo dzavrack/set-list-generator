@@ -1,6 +1,6 @@
 import { RulesView } from "@/components/rules/RulesView";
 
-export const metadata = { title: "House rules · Gig Book" };
+export const metadata = { title: "Set builder rules · Gig Book" };
 
 export default function Page() {
   return <RulesView />;

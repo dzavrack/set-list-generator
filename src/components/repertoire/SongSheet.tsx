@@ -9,6 +9,7 @@ import { Field, Input, Select, Textarea } from "@/components/ui/Field";
 import { Button } from "@/components/ui/Button";
 import { cx } from "@/components/ui/cx";
 import { toast } from "@/components/ui/Toast";
+import { AboutTune } from "./AboutTune";
 
 export function SongSheet({ song, genre, onClose, onEdit }: { song: Song | null; genre: GenreConfig; onClose: () => void; onEdit?: (s: Song) => void }) {
   const { rep, setRep, setStatus, setField } = useRepertoire();
@@ -57,7 +58,7 @@ export function SongSheet({ song, genre, onClose, onEdit }: { song: Song | null;
                         type="button"
                         aria-pressed={on}
                         onClick={() => setField(song.id, "styles", on ? styles.filter((s) => s !== code) : [...styles, code])}
-                        className={cx("h-7 rounded-full border px-3 text-xs transition-colors", on ? "border-[rgb(255_43_69/0.55)] bg-[rgb(255_43_69/0.1)] text-ink" : "border-line-strong text-muted hover:text-ink")}
+                        className={cx("h-7 rounded-chip border px-3 text-xs transition-colors", on ? "border-[color-mix(in_srgb,var(--accent)_55%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] text-ink" : "border-line-strong text-muted hover:text-ink")}
                       >
                         {label}
                       </button>
@@ -70,6 +71,7 @@ export function SongSheet({ song, genre, onClose, onEdit }: { song: Song | null;
               </Field>
             </section>
 
+            <AboutTune song={song} genre={genre} />
 
             {usedIn.length > 0 && (
               <section className="space-y-2.5">

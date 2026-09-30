@@ -39,7 +39,7 @@ export function WeekChart({ week }: { week: WeekStats }) {
                 )}
                 {h ? (
                   <span
-                    className={cx("w-1.5 rounded-full", d.isToday ? "tube-v !w-1.5 !bg-[linear-gradient(180deg,var(--neon-core),var(--neon-hot)_18%,var(--neon))]" : "bg-surface-3 shadow-[inset_0_0_0_1px_var(--line-strong)]")}
+                    className={cx("w-1.5 rounded-full", !d.isToday && "week-bar", d.isToday ? "tube-v !w-1.5 !bg-[linear-gradient(180deg,var(--neon-core),var(--neon-hot)_18%,var(--neon))]" : "bg-surface-3 shadow-[inset_0_0_0_1px_var(--line-strong)]")}
                     style={{ height: h }}
                   />
                 ) : (
@@ -104,7 +104,7 @@ export function RecentLog({
             return (
               <li key={s.id} className="group flex min-h-[60px] items-center gap-3 border-b border-line px-5 py-2.5 last:border-0 sm:px-6">
                 <div className="min-w-0 flex-1">
-                  <p className={cx("truncate", s.songId ? "font-serif text-[19px] leading-tight text-ink" : "text-[15px] text-ink-2")}>{s.title}</p>
+                  <p className={cx("truncate", s.songId ? "font-serif title-plain text-[19px] leading-tight text-ink" : "text-[15px] text-ink-2")}>{s.title}</p>
                   <p className="mt-0.5 truncate text-xs text-muted">
                     {when}
                     {GENRES[s.genre] ? ` · ${GENRES[s.genre].name}` : ""}

@@ -9,7 +9,7 @@ import { useBooks, useCustomSongs, useGenre, useRepertoire } from "@/lib/state";
 import { Button } from "@/components/ui/Button";
 import { Input, Select } from "@/components/ui/Field";
 import { PageHeader, StatCard, Tabs } from "@/components/ui/Page";
-import { StatusPicker, StyleTag, statusDot } from "@/components/ui/Status";
+import { StatusBar, StatusPicker, StyleTag, statusDot } from "@/components/ui/Status";
 import { Empty } from "@/components/ui/Empty";
 import { cx } from "@/components/ui/cx";
 import { toast } from "@/components/ui/Toast";
@@ -36,7 +36,8 @@ function Repertoire() {
   const { rep, setStatus, setStatusMany } = useRepertoire();
   const [books] = useBooks();
 
-  const [mode, setMode] = useState<"browse" | "sort">("browse");
+  // Quick sort is the default: the fastest way to get a book ready. Picking a stat tile switches to Browse.
+  const [mode, setMode] = useState<"browse" | "sort">("sort");
   const [filter, setFilter] = useState<Filter>("all");
   const [q, setQ] = useState("");
   const dq = useDeferredValue(q);
@@ -105,14 +106,13 @@ function Repertoire() {
   const pct = (n: number) => (counts.total ? `${Math.round((n / counts.total) * 100)}% of the book` : "");
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <PageHeader
-        title="Repertoire"
+        title={genre.name}
         description={`Mark what you can call on the bandstand. The builder only reaches for ${genre.noun}s you know.`}
         actions={
           <>
             <Button onClick={() => setImporting(true)}><FileUp strokeWidth={1.75} />Import a list</Button>
-            <Button variant="primary" onClick={() => { setEditing(null); setAdding(true); }}><Plus strokeWidth={2} />Add your own</Button>
           </>
         }
       />
@@ -121,19 +121,20 @@ function Repertoire() {
         label="View"
         value={mode}
         onChange={setMode}
-        tabs={[{ value: "browse", label: "Browse" }, { value: "sort", label: "Quick sort" }]}
-        right={<span className="tabular font-mono text-xs text-muted">{loading ? "Loading…" : `${(counts.total - ownCount).toLocaleString()} ${genre.noun}s in ${genre.name}${ownCount ? ` + ${ownCount} of yours` : ""}`}</span>}
+        tabs={[{ value: "sort", label: "Quick sort" }, { value: "browse", label: "Browse" }]}
+        right={<span className="tabular hidden font-mono text-xs text-muted sm:inline">{loading ? "Loading…" : `${(counts.total - ownCount).toLocaleString()} ${genre.noun}s in ${genre.name}${ownCount ? ` + ${ownCount} of yours` : ""}`}</span>}
       />
 
-      <section aria-label="Your repertoire at a glance" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <StatCard label="Know it" dot={statusDot.know} value={counts.c.know} sub={pct(counts.c.know)} active={filter === "know"} onClick={() => pickFilter("know")} />
-        <StatCard label="Shaky" dot={statusDot.shaky} value={counts.c.shaky} sub="Needs a chart" active={filter === "shaky"} onClick={() => pickFilter("shaky")} />
-        <StatCard label="Want to learn" dot={statusDot.learn} value={counts.c.learn} sub="In the practice queue" active={filter === "learn"} onClick={() => pickFilter("learn")} />
+      <section aria-label="Your repertoire at a glance" className="stats-compact grid grid-cols-4 gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4">
+        <StatCard label="Know it" dot={statusDot.know} tone="know" value={counts.c.know} sub={pct(counts.c.know)} active={filter === "know"} onClick={() => pickFilter("know")} />
+        <StatCard label="Shaky" dot={statusDot.shaky} tone="shaky" value={counts.c.shaky} sub="Needs a chart" active={filter === "shaky"} onClick={() => pickFilter("shaky")} />
+        <StatCard label="Want to learn" dot={statusDot.learn} tone="learn" value={counts.c.learn} sub="In the practice queue" active={filter === "learn"} onClick={() => pickFilter("learn")} />
         <StatCard label="Unsorted" value={counts.unsorted.toLocaleString()} sub={counts.c.no ? `${counts.c.no} skipped` : "Quick sort gets through them fast"} active={filter === "unsorted"} onClick={() => pickFilter("unsorted")} />
+        <StatusBar counts={counts.c} total={counts.total} className="not-noir col-span-full -mt-0.5" />
       </section>
 
       {mode === "sort" ? (
-        <QuickSort songs={songs} genre={genre} onOpen={setOpen} />
+        <QuickSort songs={songs} genre={genre} onOpen={setOpen} onAdd={() => { setEditing(null); setAdding(true); }} />
       ) : (
         <section aria-label={`${genre.noun}s`} className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
@@ -174,8 +175,8 @@ function Repertoire() {
                   aria-pressed={on}
                   onClick={() => { setStyle(code); setShown(PAGE); }}
                   className={cx(
-                    "h-8 shrink-0 rounded-full border px-3.5 text-[13px] transition-colors",
-                    on ? "border-[rgb(255_43_69/0.6)] bg-[rgb(255_43_69/0.1)] text-ink shadow-[0_0_16px_-6px_var(--neon-glow)]" : "border-line-strong text-ink-2 hover:border-[rgb(255_236_228/0.22)] hover:text-ink",
+                    "h-8 shrink-0 rounded-chip border px-3.5 text-[13px] transition-colors",
+                    on ? "border-[color-mix(in_srgb,var(--accent)_60%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] text-ink shadow-[0_0_16px_-6px_var(--neon-glow)]" : "border-line-strong text-ink-2 hover:border-[color-mix(in_srgb,var(--ink)_22%,transparent)] hover:text-ink",
                   )}
                 >
                   {label}
@@ -224,11 +225,11 @@ function Repertoire() {
                 const styles = e?.styles ?? s.styles;
                 const meta = [s.artist, s.year].filter(Boolean).join(" · ");
                 return (
-                  <li key={s.id} className="group flex items-center gap-4 border-b border-line px-4 py-3.5 transition-colors last:border-0 hover:bg-[rgb(255_236_228/0.025)] sm:gap-5 sm:px-6">
+                  <li key={s.id} data-tone={e?.status} className="song-row group flex items-center gap-4 border-b border-line px-4 py-3.5 transition-colors last:border-0 hover:bg-[color-mix(in_srgb,var(--ink)_2%,transparent)] sm:gap-5 sm:px-6">
                     <span className="tabular hidden w-8 shrink-0 text-right font-mono text-xs text-faint sm:block">{s.rank ?? "·"}</span>
                     <button type="button" onClick={() => setOpen(s)} className="min-w-0 flex-1 text-left">
                       <span className="flex items-center gap-2">
-                        <span className="truncate font-serif text-[21px] leading-tight text-ink group-hover:text-white">{s.title}</span>
+                        <span className="truncate font-serif title-plain text-[21px] leading-tight text-ink group-hover:text-white">{s.title}</span>
                         {s.hit && <Star className="h-3.5 w-3.5 shrink-0 fill-current text-neon-hot" aria-label="Crowd favourite" />}
                         {e?.key && <span className="shrink-0 rounded-md border border-line-strong px-1.5 py-px font-mono text-[11px] text-ink-2">{e.key}</span>}
                       </span>

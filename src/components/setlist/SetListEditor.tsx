@@ -61,7 +61,7 @@ const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, 
       style={style}
       className={cx(
         "group relative flex items-center gap-2 border-b border-line py-2 pr-2 pl-1.5 transition-colors last:border-b-0 sm:gap-3 sm:pr-3 sm:pl-2",
-        !overlay && "hover:bg-[rgb(255_236_228/0.025)]",
+        !overlay && "hover:bg-[color-mix(in_srgb,var(--ink)_2%,transparent)]",
         ghost && "opacity-30",
         overlay && "glow-ring list-none rounded-xl border-b-0 bg-surface-2/95 backdrop-blur-sm",
       )}
@@ -78,7 +78,7 @@ const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, 
       <span className="tabular w-5 shrink-0 text-right font-mono text-xs text-faint">{n ?? "·"}</span>
       <button type="button" onClick={onOpen} tabIndex={onOpen ? undefined : -1} className="min-w-0 flex-1 py-0.5 pl-1 text-left">
         <span className="flex items-center gap-2">
-          <span className="truncate font-serif text-[18px] leading-snug text-ink group-hover:text-white sm:text-[19px]">{item.title}</span>
+          <span className="truncate font-serif title-plain text-[18px] leading-snug text-ink group-hover:text-white sm:text-[19px]">{item.title}</span>
           {warn && (
             <span title={warn} className="shrink-0">
               <TriangleAlert className="h-3.5 w-3.5 text-neon-hot [filter:drop-shadow(0_0_4px_var(--neon))]" strokeWidth={2} aria-hidden />
@@ -89,7 +89,7 @@ const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, 
         {(item.feel || shaky || other) ? (
           <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted">
             {item.feel && <span className="mr-0.5">{item.feel}</span>}
-            {shaky && <StyleTag active>Shaky</StyleTag>}
+            {shaky && <StyleTag tone="shaky">Shaky</StyleTag>}
             {other && <StyleTag>Other style</StyleTag>}
             <span className="tabular font-mono text-[11.5px] text-faint sm:hidden">{mins}′</span>
           </span>
@@ -104,7 +104,7 @@ const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, 
           type="button"
           onClick={onRemove}
           aria-label={`Remove ${item.title}`}
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-faint transition-colors hover:bg-[rgb(255_236_228/0.06)] hover:text-ink sm:h-9 sm:w-9"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-faint transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] hover:text-ink sm:h-9 sm:w-9"
         >
           <X className="h-4 w-4" strokeWidth={1.75} />
         </button>
@@ -132,10 +132,10 @@ function SortableRow(props: Omit<RowProps, "handle" | "ghost" | "style" | "overl
 function DropList({ list, children, empty, count }: { list: number; children: React.ReactNode; empty: string; count: number }) {
   const { setNodeRef, isOver } = useDroppable({ id: listId(list) });
   return (
-    <ul ref={setNodeRef} className={cx("min-h-14 border-t border-line transition-colors", isOver && "bg-[rgb(255_43_69/0.04)]")}>
+    <ul ref={setNodeRef} className={cx("min-h-14 border-t border-line transition-colors", isOver && "bg-[color-mix(in_srgb,var(--accent)_4%,transparent)]")}>
       {children}
       {count === 0 && (
-        <li className={cx("m-3 rounded-xl border border-dashed px-4 py-5 text-center text-[13px] text-faint transition-colors", isOver ? "border-[rgb(255_43_69/0.5)] text-ink-2" : "border-line-strong")}>{empty}</li>
+        <li className={cx("m-3 rounded-xl border border-dashed px-4 py-5 text-center text-[13px] text-faint transition-colors", isOver ? "border-[color-mix(in_srgb,var(--accent)_50%,transparent)] text-ink-2" : "border-line-strong")}>{empty}</li>
       )}
     </ul>
   );
@@ -159,7 +159,7 @@ function AddSong({ songs, rep, exclude, onAdd, noun }: { songs: Song[]; rep: Rep
         }}
         placeholder={`Add a ${noun}`}
         aria-label={`Add a ${noun}`}
-        className="h-12 w-full rounded-b-2xl bg-transparent pr-4 pl-11 text-sm text-ink placeholder:text-muted transition-[background-color,box-shadow] duration-150 hover:bg-[rgb(255_236_228/0.02)] focus:bg-[rgb(255_236_228/0.03)] focus:shadow-[inset_0_0_0_1px_rgb(255_43_69/0.55),inset_0_0_0_4px_rgb(255_43_69/0.12)] focus:outline-none focus-visible:outline-none"
+        className="h-12 w-full rounded-b-2xl bg-transparent pr-4 pl-11 text-sm text-ink placeholder:text-muted transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--ink)_2%,transparent)] focus:bg-[color-mix(in_srgb,var(--ink)_3%,transparent)] focus:shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--accent)_55%,transparent),inset_0_0_0_4px_color-mix(in_srgb,var(--accent)_12%,transparent)] focus:outline-none focus-visible:outline-none"
       />
       {res.length > 0 && (
         <ul className="absolute inset-x-2 top-full z-30 -mt-1 overflow-hidden rounded-xl border border-line-strong bg-surface-2 py-1 shadow-[0_20px_60px_rgb(0_0_0/0.7)]">

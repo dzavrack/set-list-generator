@@ -324,21 +324,25 @@ export function PracticeRoom() {
       >
         <StatCard
           label="Minutes this week"
+          tone="learn"
           value={week.minutes}
           sub={todayMin > 0 ? `${Math.round(todayMin)} today` : "Nothing today yet"}
         />
         <StatCard
           label="Day streak"
+          tone="accent"
           value={week.streak}
           sub={week.streak === 0 ? "Start one today" : week.practisedToday ? "Kept alive today" : "Practise today to keep it"}
         />
         <StatCard
           label="Sessions this week"
+          tone="shaky"
           value={week.sessions}
           sub={week.sessions ? `${Math.round(week.minutes / week.sessions)} min on average` : "Ten minutes counts"}
         />
         <StatCard
           label={`${g.noun === "tune" ? "Tunes" : "Songs"} learned`}
+          tone="know"
           value={learned.length}
           sub="Through a learning plan"
         />

@@ -92,7 +92,7 @@ function AddSongForm({ onClose, genre, songs, editing }: Props) {
               const on = styles.includes(code);
               return (
                 <button key={code} type="button" aria-pressed={on} onClick={() => setStyles(on ? styles.filter((s) => s !== code) : [...styles, code])}
-                  className={cx("h-7 rounded-full border px-3 text-xs transition-colors", on ? "border-[rgb(255_43_69/0.55)] bg-[rgb(255_43_69/0.1)] text-ink" : "border-line-strong text-muted hover:text-ink")}>
+                  className={cx("h-7 rounded-chip border px-3 text-xs transition-colors", on ? "border-[color-mix(in_srgb,var(--accent)_55%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] text-ink" : "border-line-strong text-muted hover:text-ink")}>
                   {label}
                 </button>
               );

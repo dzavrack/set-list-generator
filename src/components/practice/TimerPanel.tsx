@@ -49,7 +49,7 @@ export function TimerPanel(p: TimerPanelProps) {
       <div
         aria-hidden
         className={cx(
-          "pointer-events-none absolute top-24 left-1/2 h-[380px] w-[380px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(255_43_69/0.13),transparent)] blur-2xl transition-opacity duration-700",
+          "pointer-events-none absolute top-24 left-1/2 h-[380px] w-[380px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--accent)_13%,transparent),transparent)] blur-2xl transition-opacity duration-700",
           running ? "opacity-100" : "opacity-30",
         )}
       />
@@ -99,7 +99,7 @@ export function TimerPanel(p: TimerPanelProps) {
                 style={{
                   filter: running
                     ? "drop-shadow(0 0 2px var(--neon)) drop-shadow(0 0 7px var(--neon)) drop-shadow(0 0 18px var(--neon-glow))"
-                    : "drop-shadow(0 0 4px rgb(255 43 69 / 0.35))",
+                    : "drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 35%, transparent))",
                   transition: "filter 150ms",
                 }}
               >
@@ -193,11 +193,11 @@ export function TimerPanel(p: TimerPanelProps) {
         </div>
 
         {p.lastRun && !active ? (
-          <p className="mt-6 inline-flex max-w-full items-center gap-2 rounded-full border border-line-strong bg-surface-2/70 py-1.5 pr-4 pl-2.5 text-[13px] text-ink-2">
+          <p className="mt-6 inline-flex max-w-full items-center gap-2 rounded-chip border border-line-strong bg-surface-2/70 py-1.5 pr-4 pl-2.5 text-[13px] text-ink-2">
             <Check className="h-3.5 w-3.5 shrink-0 text-neon-hot" strokeWidth={2.25} />
             <span className="truncate">
               {p.lastRun.completed ? "Time. " : ""}Logged <span className="tabular font-mono text-ink">{fmtMin(p.lastRun.minutes)}</span> on{" "}
-              <span className="font-serif text-[15px] text-ink">{p.lastRun.title}</span>
+              <span className="font-serif title-plain text-[15px] text-ink">{p.lastRun.title}</span>
             </span>
           </p>
         ) : (

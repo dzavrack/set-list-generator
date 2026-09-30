@@ -32,7 +32,7 @@ function Stepper({ value, onChange, step, min, max, unit, label }: { value: numb
   const clamp = (v: number) => Math.min(max, Math.max(min, Math.round(v / step) * step));
   const btn = "grid h-full w-9 place-items-center text-muted transition-colors hover:bg-surface-3 hover:text-ink disabled:pointer-events-none disabled:opacity-30";
   return (
-    <div role="group" aria-label={label} className="inline-flex h-10 shrink-0 self-start sm:self-auto items-stretch overflow-hidden rounded-[10px] border border-line-strong bg-surface-2">
+    <div role="group" aria-label={label} className="inline-flex h-10 shrink-0 self-start sm:self-auto items-stretch overflow-hidden rounded-control border border-line-strong bg-surface-2">
       <button type="button" aria-label={`Less ${label.toLowerCase()}`} onClick={() => onChange(clamp(value - step))} disabled={value <= min} className={btn}>
         <Minus className="h-3.5 w-3.5" strokeWidth={2} />
       </button>
@@ -49,7 +49,7 @@ function Stepper({ value, onChange, step, min, max, unit, label }: { value: numb
             const v = parseFloat(e.target.value);
             if (!isNaN(v)) onChange(Math.min(max, Math.max(min, v)));
           }}
-          className="tabular w-10 [appearance:textfield] bg-transparent text-right font-mono text-sm text-ink focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          className="rule-num tabular w-10 [appearance:textfield] bg-transparent text-right font-mono text-sm text-ink focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         />
         {unit && <span className="w-9 font-mono text-[11px] text-muted">{unit}</span>}
       </label>
@@ -87,7 +87,7 @@ export function RulesView() {
     <div className="flex flex-col gap-8">
       <PageHeader
         eyebrow={`${genre.name} book`}
-        title="House rules"
+        title="Set builder rules"
         description={`How the builder thinks when it writes a set. Change a number and the next set list follows it. Feels come from what you set on each ${genre.noun}, or from its style.`}
         actions={
           confirmReset ? (
@@ -129,7 +129,7 @@ export function RulesView() {
               const n = g.rules.filter((r) => r.kind !== "fixed" && r.key in overrides).length;
               return (
                 <li key={g.id}>
-                  <a href={`#rules-${g.id}`} className="group flex h-9 items-center gap-2.5 rounded-lg px-3 text-sm text-ink-2 transition-colors hover:bg-[rgb(255_236_228/0.04)] hover:text-ink">
+                  <a href={`#rules-${g.id}`} className="group flex h-9 items-center gap-2.5 rounded-lg px-3 text-sm text-ink-2 transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_4%,transparent)] hover:text-ink">
                     <Icon className="h-4 w-4 shrink-0 text-muted group-hover:text-ink-2" strokeWidth={1.75} />
                     <span className="min-w-0 flex-1 truncate">{g.title}</span>
                     {n > 0 && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-neon shadow-[0_0_6px_var(--neon)]" aria-label={`${n} changed`} />}
@@ -196,7 +196,7 @@ export function RulesView() {
                   </ul>
                 )}
                 {fixed.length > 0 && (
-                  <div className={cx("px-5 py-4 sm:px-6", settings.length > 0 && "border-t border-line bg-[rgb(255_236_228/0.015)]")}>
+                  <div className={cx("px-5 py-4 sm:px-6", settings.length > 0 && "border-t border-line bg-[color-mix(in_srgb,var(--ink)_2%,transparent)]")}>
                     {settings.length > 0 && <p className="label mb-3">Always</p>}
                     <ul className="flex flex-col gap-2.5">
                       {fixed.map((r, i) => (
@@ -213,7 +213,7 @@ export function RulesView() {
           })}
           <Link
             href="/backup/"
-            className="group flex items-center gap-4 rounded-2xl border border-dashed border-line-strong px-5 py-4 transition-colors hover:border-[rgb(255_236_228/0.22)] hover:bg-surface-2/50 sm:px-6"
+            className="group flex items-center gap-4 rounded-2xl border border-dashed border-line-strong px-5 py-4 transition-colors hover:border-[color-mix(in_srgb,var(--ink)_22%,transparent)] hover:bg-surface-2/50 sm:px-6"
           >
             <DatabaseBackup className="h-[18px] w-[18px] shrink-0 text-muted group-hover:text-ink-2" strokeWidth={1.75} />
             <span className="min-w-0 flex-1">

@@ -12,11 +12,20 @@ export function BrandMark({ className }: { className?: string }) {
   );
 }
 
-export function Brand({ size = "md" }: { size?: "md" | "lg" }) {
+/**
+ * The brand. In the Marquee look, pass `sign` to show the open book's own sign instead
+ * ("Juke Joint", "Honky Tonk"...) in that genre's typeface, as the reference app does.
+ */
+export function Brand({ size = "md", sign }: { size?: "sm" | "md" | "lg"; sign?: string }) {
+  const text = { sm: "text-lg", md: "text-[27px]", lg: "text-5xl" }[size];
   return (
-    <span className="flex items-center gap-2.5">
-      <BrandMark className={size === "lg" ? "h-12 w-12" : "h-8 w-8"} />
-      <span className={cx("neon font-neon leading-none", size === "lg" ? "text-5xl" : "text-[27px]")}>Gig Book</span>
+    <span className="flex min-w-0 items-center gap-2.5">
+      <BrandMark className={cx({ sm: "h-6 w-6", md: "h-8 w-8", lg: "h-12 w-12" }[size], sign && "look-noir", "not-sleeve")} />
+      <span className={cx("neon brand-text font-neon leading-none", text, sign && "look-noir")}>Gig Book</span>
+      {sign && (
+        <span className={cx("look-marquee min-w-0 leading-[1.05]", size === "sm" ? "sign-dim -my-1 truncate py-1 text-[21px]" : "sign text-[30px]")}>{sign}</span>
+      )}
+      {sign && <span className="look-sleeve brand-sleeve min-w-0 truncate">{sign}</span>}
     </span>
   );
 }

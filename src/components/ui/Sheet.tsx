@@ -35,7 +35,7 @@ export function Sheet({
         if (e.target === ref.current) onClose();
       }}
       className={cx(
-        "m-0 max-h-none max-w-none bg-transparent p-0 text-ink backdrop:bg-[rgb(6_4_5/0.72)] backdrop:backdrop-blur-[3px]",
+        "m-0 max-h-none max-w-none bg-transparent p-0 text-ink backdrop:bg-[color-mix(in_srgb,var(--bg)_72%,transparent)] backdrop:backdrop-blur-[3px]",
         side === "right"
           ? "fixed inset-y-0 right-0 left-auto h-dvh w-full sm:w-[min(520px,94vw)] sm:p-3"
           : "fixed inset-0 m-auto h-fit max-h-[92dvh] w-[min(680px,94vw)]",
@@ -45,11 +45,11 @@ export function Sheet({
         <div
           className={cx(
             "relative flex h-full flex-col overflow-hidden border-line-strong bg-panel shadow-[0_30px_90px_rgb(0_0_0/0.85)]",
-            side === "right" ? "sm:rounded-[20px] sm:border" : "max-h-[92dvh] rounded-[20px] border",
+            side === "right" ? "sm:rounded-panel sm:border" : "max-h-[92dvh] rounded-panel border",
             className,
           )}
         >
-          <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[radial-gradient(closest-side,rgb(255_43_69/0.16),transparent)] blur-2xl" />
+          <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--accent)_16%,transparent),transparent)] blur-2xl" />
           {children}
         </div>
       )}

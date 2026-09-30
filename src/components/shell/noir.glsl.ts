@@ -1,6 +1,6 @@
 /**
  * Fragment shader: a rainy night street off Broadway.
- * Red smoke rolling up from a sign off-frame, two steady neon tubes that light the smoke,
+ * Smoke in the book's accent colour rolling up from a sign off-frame, two steady neon tubes that light the smoke,
  * tungsten and red bokeh down the block, fine rain, a wet reflection, grain and vignette.
  * Nothing flickers: neon and bokeh hold a constant brightness and the grain is static.
  * All layout is in CSS pixels (uScale converts), with y measured from the top.
@@ -16,6 +16,8 @@ uniform vec2 uRes;      // canvas size in device px
 uniform float uScale;   // device px per CSS px
 uniform float uTime;
 uniform float uTubeX;   // CSS px x of the first tube (negative = no tubes)
+uniform vec3 uAccent;   // the book's neon, brightness-matched so every hue sits at the same level
+uniform vec3 uBase;     // the street colour
 
 float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float hash1(float n) { return fract(sin(n) * 43758.5453123); }
@@ -39,7 +41,7 @@ void main() {
   vec2 uv = css / size;
   float t = uTime;
 
-  vec3 col = vec3(0.022, 0.013, 0.016);
+  vec3 col = uBase;
 
   // ---- smoke: domain-warped fbm drifting up and to the right, wisps with dark gaps ----
   vec2 sp = css / 360.0;
@@ -73,17 +75,17 @@ void main() {
       float d = length(vec2(dx, dy));
       float core = exp(-d * d / 1.3);
       float bloom = exp(-d / 5.0) * 0.55 + exp(-d / 26.0) * 0.28 + exp(-d / 110.0) * 0.16;
-      tubeCol += f * (vec3(1.0, 0.86, 0.88) * core + vec3(1.0, 0.1, 0.2) * bloom);
+      tubeCol += f * (mix(vec3(1.0), uAccent, 0.14) * core + uAccent * bloom);
       tubeLight += f * exp(-d / 150.0); // the tubes light the smoke around them
     }
   }
 
-  // smoke colour: deep crimson in shadow, hot red where the neon hits it
-  vec3 smokeCol = mix(vec3(0.38, 0.03, 0.07), vec3(1.0, 0.16, 0.24), clamp(tubeLight * 0.9 + srcA * 0.5, 0.0, 1.0));
+  // smoke colour: deep accent in shadow, hot accent where the neon hits it
+  vec3 smokeCol = mix(uAccent * 0.3, uAccent, clamp(tubeLight * 0.9 + srcA * 0.5, 0.0, 1.0));
   col += smokeCol * density * (0.42 + tubeLight * 0.9);
 
   // sign glow bleeding in from off-frame (top-left)
-  col += vec3(1.0, 0.1, 0.18) * 0.22 * exp(-length((uv - vec2(-0.05, -0.1)) * vec2(1.2, 1.0)) * 3.0);
+  col += uAccent * 0.22 * exp(-length((uv - vec2(-0.05, -0.1)) * vec2(1.2, 1.0)) * 3.0);
 
   col += tubeCol;
 
@@ -99,7 +101,7 @@ void main() {
     float d = length(css - c);
     float disc = smoothstep(r, r * 0.72, d);
     float rim = smoothstep(r * 0.62, r * 0.92, d) * disc * 0.35; // lens edge
-    vec3 bc = hc < 0.62 ? vec3(1.0, 0.6, 0.3) : vec3(1.0, 0.16, 0.24);
+    vec3 bc = hc < 0.62 ? vec3(1.0, 0.6, 0.3) : uAccent;
     float a = mix(0.42, 0.14, hr) * 0.9;
     col += bc * (disc * 0.55 + rim) * a;
     col += bc * exp(-d / (r * 1.6)) * a * 0.18; // haze around each light
@@ -110,7 +112,7 @@ void main() {
     float refl = smoothstep(size.y * 0.7, size.y, css.y);
     float ripple = 0.75 + 0.25 * sin(css.y * 0.3 + t * 0.6);
     float dx = abs(css.x - uTubeX - 3.0 + (noise(vec2(css.y * 0.04, t * 0.25)) - 0.5) * 8.0);
-    col += vec3(1.0, 0.12, 0.2) * refl * exp(-dx / 9.0) * ripple * 0.35;
+    col += uAccent * refl * exp(-dx / 9.0) * ripple * 0.35;
   }
 
   // ---- rain: dim, and kept off the neon so nothing strobes ----

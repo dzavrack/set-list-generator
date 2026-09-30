@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# research script cache and raw output
+/scripts/research/.cache/
+/scripts/research/out/*.log

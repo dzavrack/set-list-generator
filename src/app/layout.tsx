@@ -1,23 +1,75 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Tilt_Neon } from "next/font/google";
+import Script from "next/script";
+import {
+  Alfa_Slab_One,
+  Anton,
+  Barlow,
+  Bungee,
+  Cinzel,
+  Courier_Prime,
+  Geist,
+  Geist_Mono,
+  Great_Vibes,
+  Instrument_Serif,
+  Libre_Franklin,
+  Monoton,
+  Oswald,
+  Pacifico,
+  Permanent_Marker,
+  Righteous,
+  Rye,
+  Tilt_Neon,
+} from "next/font/google";
 import "./globals.css";
+import { GenreTheme } from "@/components/shell/GenreTheme";
+import { GENRE_THEME_BOOT } from "@/lib/theme";
 
+// Noir look
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 const instrument = Instrument_Serif({ variable: "--font-instrument", subsets: ["latin"], weight: "400", style: ["normal", "italic"] });
 const tilt = Tilt_Neon({ variable: "--font-tilt", subsets: ["latin"] });
+
+// Marquee look
+const oswald = Oswald({ variable: "--font-oswald", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const barlow = Barlow({ variable: "--font-barlow", subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"] });
+const courier = Courier_Prime({ variable: "--font-courier", subsets: ["latin"], weight: ["400", "700"] });
+
+// Sleeve look: a heavy condensed display face over Franklin Gothic, like the old record jackets
+const anton = Anton({ variable: "--font-anton", subsets: ["latin"], weight: "400" });
+const franklin = Libre_Franklin({ variable: "--font-franklin", subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], style: ["normal", "italic"] });
+
+// Book signs: one per genre. Not preloaded; the browser fetches only the ones on screen.
+// (next/font needs literal options here, so no shared object.)
+const rye = Rye({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-rye" });
+const bungee = Bungee({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-bungee" });
+const monoton = Monoton({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-monoton" });
+const righteous = Righteous({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-righteous" });
+const alfa = Alfa_Slab_One({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-alfa" });
+const cinzel = Cinzel({ subsets: ["latin"], weight: "700", preload: false, variable: "--font-cinzel" });
+const pacifico = Pacifico({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-pacifico" });
+const marker = Permanent_Marker({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-marker" });
+const vibes = Great_Vibes({ subsets: ["latin"], weight: "400", preload: false, variable: "--font-vibes" });
+
+const FONTS = [geist, geistMono, instrument, tilt, oswald, barlow, courier, anton, franklin, rye, bungee, monoton, righteous, alfa, cinzel, pacifico, marker, vibes]
+  .map((f) => f.variable)
+  .join(" ");
 
 export const metadata: Metadata = {
   title: "The Gig Book",
   description: "Mark what you can play, then build the night's set list.",
 };
 
-export const viewport: Viewport = { themeColor: "#060405" };
+export const viewport: Viewport = { themeColor: "#0a0908" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${instrument.variable} ${tilt.variable} dark h-full`}>
-      <body className="min-h-full">{children}</body>
+    <html lang="en" data-look="sleeve" className={`${FONTS} dark h-full`} suppressHydrationWarning>
+      <body className="min-h-full">
+        <GenreTheme />
+        {children}
+        <Script id="genre-theme" strategy="beforeInteractive">{GENRE_THEME_BOOT}</Script>
+      </body>
     </html>
   );
 }

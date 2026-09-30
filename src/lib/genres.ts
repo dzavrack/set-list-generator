@@ -12,7 +12,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   jazz: {
     key: "jazz",
     name: "Jazz",
-    sign: "Jazz Gig Book",
+    sign: "Jazz Book",
     noun: "tune",
     tagline: "1,114 standards, tagged with every style they're played in.",
     styles: {"gy":"Gypsy jazz","tr":"Trad / New Orleans","sw":"Swing era","sb":"Songbook standards","bp":"Bebop","hb":"Hard bop","md":"Modal / post-bop","la":"Bossa / Latin","bl":"Ballad","bu":"Blues","wz":"Waltz","po":"Pop / soul","xm":"Holiday"},
@@ -43,7 +43,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   blues: {
     key: "blues",
     name: "Blues",
-    sign: "Juke Joint",
+    sign: "Blues Book",
     noun: "song",
     tagline: "Delta, Chicago and Texas: the blues bands actually get asked to play.",
     styles: {"dl":"Delta & acoustic","ch":"Chicago","tx":"Texas","jm":"Jump & swing blues","sb":"Soul blues","br":"Blues rock","bw":"Boogie & piano","mb":"Modern blues","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -72,7 +72,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   country: {
     key: "country",
     name: "Country",
-    sign: "Honky Tonk",
+    sign: "Country Book",
     noun: "song",
     tagline: "Hank to Stapleton: honky-tonk, outlaw, '90s and today's hits.",
     styles: {"ht":"Honky-tonk","cl":"Classic Nashville","ou":"Outlaw","wc":"Western swing & cowboy","cr":"Country rock & Southern","cp":"Country pop","ld":"Line dance","du":"Duets","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -101,7 +101,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   rock: {
     key: "rock",
     name: "Rock",
-    sign: "Rock Show",
+    sign: "Rock Book",
     noun: "song",
     tagline: "Chuck Berry to the Killers: every cover-band staple.",
     styles: {"rr":"50s rock & roll","bi":"British Invasion & 60s","cr":"Classic rock","so":"Southern rock","yr":"Soft & yacht rock","pk":"Punk & new wave","ar":"Arena & 80s rock","al":"Alternative & grunge","mr":"2000s+ rock","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -131,7 +131,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   pop: {
     key: "pop",
     name: "Pop",
-    sign: "Top 40",
+    sign: "Pop Book",
     noun: "song",
     tagline: "Girl groups to Sabrina Carpenter: the hits people sing along to.",
     styles: {"gp":"Girl groups & 60s pop","dc":"Disco","sy":"Synth & new wave pop","dv":"Divas & power ballads","tp":"Teen pop & boy bands","pr":"Pop rock","dp":"Dance pop","cp":"Current pop","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -160,7 +160,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   rnb: {
     key: "rnb",
     name: "R&B / Soul",
-    sign: "Soul Revue",
+    sign: "R&B Book",
     noun: "song",
     tagline: "Motown, Stax, funk and slow jams through Silk Sonic.",
     styles: {"mo":"Motown","ss":"Southern soul & Stax","fk":"Funk","ph":"Philly & 70s soul","qs":"Slow jams","nj":"New jack & 90s R&B","ns":"Neo-soul","cr":"Contemporary R&B","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -189,7 +189,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   folk: {
     key: "folk",
     name: "Folk & Bluegrass",
-    sign: "Front Porch",
+    sign: "Folk Book",
     noun: "song",
     tagline: "Fiddle tunes to Tyler Childers: folk, bluegrass, Celtic and Americana.",
     styles: {"tr":"Traditional & old-time","bg":"Bluegrass","fr":"60s folk revival","sw":"Singer-songwriter","fo":"Folk rock","am":"Americana","ce":"Celtic & Irish","if":"Indie folk","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -218,7 +218,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   gospel: {
     key: "gospel",
     name: "Gospel & Worship",
-    sign: "Sunday Service",
+    sign: "Gospel Book",
     noun: "song",
     tagline: "Hymns, spirituals, gospel choirs and today's worship songs.",
     styles: {"hy":"Hymns","sp":"Spirituals","bg":"Black gospel","sg":"Southern gospel","cw":"Contemporary worship","cc":"Christian radio (CCM)","xm":"Christmas","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -246,7 +246,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   latin: {
     key: "latin",
     name: "Latin",
-    sign: "La Noche",
+    sign: "Latin Book",
     noun: "song",
     tagline: "Salsa, bossa, boleros, mariachi, cumbia and reggaeton.",
     styles: {"sa":"Salsa & mambo","sn":"Cuban son","bo":"Bossa nova & samba","rm":"Bolero & romántica","me":"Mexican & regional","cu":"Cumbia","ba":"Bachata & merengue","rg":"Reggaeton & urban","lp":"Latin pop & rock","tg":"Tango","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -277,7 +277,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   reggae: {
     key: "reggae",
     name: "Reggae",
-    sign: "Island Vibes",
+    sign: "Reggae Book",
     noun: "song",
     tagline: "Ska, roots, lovers rock, dancehall and calypso.",
     styles: {"sk":"Ska & rocksteady","rt":"Roots reggae","lv":"Lovers rock","dh":"Dancehall","ca":"Calypso & soca","rp":"Reggae pop & fusion","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -304,7 +304,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   hiphop: {
     key: "hiphop",
     name: "Hip-Hop",
-    sign: "The Cipher",
+    sign: "Hip-Hop Book",
     noun: "song",
     tagline: "Sugarhill Gang to Kendrick: party-starters and classics.",
     styles: {"os":"Old school","ga":"Golden age","ec":"East Coast","wc":"West Coast","so":"South","pr":"Pop rap","cn":"Conscious & alternative","tr":"Trap & modern","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},
@@ -333,7 +333,7 @@ export const GENRES: Record<GenreKey, GenreConfig> = {
   wedding: {
     key: "wedding",
     name: "Wedding Band",
-    sign: "Just Married",
+    sign: "Wedding Book",
     noun: "song",
     tagline: "Ceremony to last dance: first dances, Motown, party anthems and floor-fillers.",
     styles: {"ce":"Ceremony & processional","ck":"Cocktail hour","fd":"First dance & slow dances","pd":"Parent dances","mo":"Motown & soul","dc":"Disco & funk","pt":"Party anthems","mp":"Modern dance-floor hits","gd":"Line & group dances","cw":"Country","rk":"Rock singalongs","ld":"Last dance & send-off","bl":"Slow songs","up":"Up-tempo","pa":"Party & singalong"},

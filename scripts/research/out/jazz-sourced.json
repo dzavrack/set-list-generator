@@ -1,0 +1,900 @@
+{
+ "body-and-soul": {
+  "composer": "Johnny Green",
+  "lyricist": "Edward Heyman, Frank Eyton, Robert Sour",
+  "publishYear": 1930,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q890080",
+   "wikipedia": "https://en.wikipedia.org/wiki/Body_and_Soul_%281930_song%29"
+  }
+ },
+ "all-the-things-you-are": {
+  "composer": "Jerome Kern",
+  "lyricist": "Oscar Hammerstein II",
+  "publishYear": 1939,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1410072",
+   "wikipedia": "https://en.wikipedia.org/wiki/All_the_Things_You_Are"
+  },
+  "origin": "Very Warm for May",
+  "originKind": "show",
+  "famousRecordings": [
+   {
+    "artist": "Tommy Dorsey",
+    "year": 1939
+   },
+   {
+    "artist": "Adelaide Hall",
+    "year": 1940
+   },
+   {
+    "artist": "Artie Shaw",
+    "year": 1939
+   },
+   {
+    "artist": "Tony Martin",
+    "year": 1940
+   },
+   {
+    "artist": "Victor Borge",
+    "year": 1945
+   },
+   {
+    "artist": "Dizzy Gillespie",
+    "year": 1945
+   },
+   {
+    "artist": "Modern Jazz Quartet",
+    "year": 1952
+   },
+   {
+    "artist": "Chet Baker Quartet",
+    "year": 1953
+   },
+   {
+    "artist": "Vic Damone",
+    "year": 1956
+   },
+   {
+    "artist": "Art Pepper",
+    "year": 1956
+   },
+   {
+    "artist": "Johnny Griffin",
+    "year": 1957
+   },
+   {
+    "artist": "Sarah Vaughan",
+    "year": 1957
+   }
+  ]
+ },
+ "summertime": {
+  "composer": "George Gershwin",
+  "lyricist": "DuBose Heyward, Dorothy Heyward, Ira Gershwin",
+  "publishYear": 1935,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q844046",
+   "wikipedia": "https://en.wikipedia.org/wiki/Summertime_%28George_Gershwin_song%29"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Billie Holiday",
+    "year": 1936
+   },
+   {
+    "artist": "Sidney Bechet",
+    "year": 1939
+   },
+   {
+    "artist": "Louis Armstrong",
+    "year": 1959
+   },
+   {
+    "artist": "Chris Columbo Quintet",
+    "year": 1963
+   },
+   {
+    "artist": "Billy Stewart",
+    "year": 1966
+   },
+   {
+    "artist": "Fun Boy Three",
+    "year": 1982
+   }
+  ]
+ },
+ "round-midnight": {
+  "composer": "Thelonious Monk, Cootie Williams",
+  "lyricist": "Bernie Hanighen",
+  "publishYear": 1953,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q383357",
+   "wikipedia": "https://en.wikipedia.org/wiki/%27Round_Midnight_%28song%29"
+  }
+ },
+ "i-can-t-get-started-with-you": {
+  "composer": "Vernon Duke",
+  "lyricist": "Ira Gershwin",
+  "publishYear": 1936,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1133119",
+   "wikipedia": "https://en.wikipedia.org/wiki/I_Can%27t_Get_Started"
+  },
+  "origin": "Ziegfeld Follies of 1936",
+  "originKind": "show",
+  "famousRecordings": [
+   {
+    "artist": "Billie Holiday",
+    "year": 1938
+   },
+   {
+    "artist": "Lester Young",
+    "year": 1942
+   },
+   {
+    "artist": "Dizzy Gillespie",
+    "year": 1945
+   },
+   {
+    "artist": "Lennie Tristano",
+    "year": 1946
+   },
+   {
+    "artist": "Paul Bley",
+    "year": 1953
+   },
+   {
+    "artist": "Charlie Parker",
+    "year": 1953
+   },
+   {
+    "artist": "Jackie Gleason Orchestra",
+    "year": 1954
+   },
+   {
+    "artist": "Oscar Peterson",
+    "year": 1954
+   },
+   {
+    "artist": "John Lewis",
+    "year": 1956
+   },
+   {
+    "artist": "Soft Sands",
+    "year": 1956
+   },
+   {
+    "artist": "Sammy Davis Jr.",
+    "year": 1957
+   },
+   {
+    "artist": "Sonny Rollins",
+    "year": 1957
+   }
+  ]
+ },
+ "my-funny-valentine": {
+  "composer": "Richard Rodgers",
+  "lyricist": "Lorenz Hart",
+  "publishYear": 1937,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1956401",
+   "wikipedia": "https://en.wikipedia.org/wiki/My_Funny_Valentine"
+  }
+ },
+ "lover-man-oh-where-can-you-be": {
+  "composer": "Jimmy Davis, Ram Ramirez, Jimmy Sherman",
+  "lyricist": "Jimmy Davis, Ram Ramirez, Jimmy Sherman",
+  "publishYear": 1941,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q387590",
+   "wikipedia": "https://en.wikipedia.org/wiki/Lover_Man_%28Oh%2C_Where_Can_You_Be%3F%29"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Sarah Vaughan",
+    "year": 1945
+   },
+   {
+    "artist": "Ross Russell",
+    "year": 1946
+   },
+   {
+    "artist": "J. J. Johnson",
+    "year": 1953
+   }
+  ]
+ },
+ "what-is-this-thing-called-love": {
+  "composer": "Cole Porter",
+  "lyricist": "Cole Porter",
+  "publishYear": 1929,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q860211",
+   "wikipedia": "https://en.wikipedia.org/wiki/What_Is_This_Thing_Called_Love%3F"
+  },
+  "origin": "Wake Up and Dream",
+  "originKind": "show",
+  "famousRecordings": [
+   {
+    "artist": "Dave Brubeck",
+    "year": 1950
+   },
+   {
+    "artist": "Cannonball Adderley",
+    "year": 1960
+   },
+   {
+    "artist": "Bing Crosby",
+    "year": 1955
+   },
+   {
+    "artist": "Tommy Dorsey",
+    "year": 1942
+   },
+   {
+    "artist": "Ella Fitzgerald",
+    "year": 1956
+   },
+   {
+    "artist": "Vince Guaraldi",
+    "year": 1965
+   },
+   {
+    "artist": "Billie Holiday",
+    "year": 1945
+   },
+   {
+    "artist": "Libby Holman",
+    "year": 1930
+   },
+   {
+    "artist": "Bobby McFerrin",
+    "year": 1986
+   },
+   {
+    "artist": "Les Paul",
+    "year": 1948
+   },
+   {
+    "artist": "Leo Reisman",
+    "year": 1930
+   },
+   {
+    "artist": "Artie Shaw",
+    "year": 1938
+   }
+  ]
+ },
+ "yesterdays": {
+  "composer": "Jerome Kern",
+  "lyricist": "Otto Harbach",
+  "publishYear": 1933,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1509880",
+   "wikipedia": "https://en.wikipedia.org/wiki/Yesterdays_%281933_song%29"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Artie Shaw",
+    "year": 1938
+   },
+   {
+    "artist": "Billie Holiday",
+    "year": 1939
+   },
+   {
+    "artist": "Coleman Hawkins",
+    "year": 1944
+   },
+   {
+    "artist": "Jo Stafford",
+    "year": 1946
+   },
+   {
+    "artist": "Lee Konitz",
+    "year": 1949
+   },
+   {
+    "artist": "Art Tatum",
+    "year": 1949
+   },
+   {
+    "artist": "Lennie Tristano",
+    "year": 1949
+   },
+   {
+    "artist": "Bud Powell",
+    "year": 1950
+   },
+   {
+    "artist": "Miles Davis",
+    "year": 1951
+   },
+   {
+    "artist": "Stan Getz",
+    "year": 1951
+   },
+   {
+    "artist": "Johnny Smith",
+    "year": 1952
+   },
+   {
+    "artist": "Jackie Gleason Orchestra",
+    "year": 1954
+   }
+  ]
+ },
+ "stella-by-starlight": {
+  "composer": "Victor Young",
+  "publishYear": 1944,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q598915",
+   "wikipedia": "https://en.wikipedia.org/wiki/Stella_by_Starlight"
+  }
+ },
+ "autumn-leaves": {
+  "composer": "Joseph Kosma",
+  "lyricist": "Jacques Prévert",
+  "publishYear": 1947,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q79330104",
+   "wikipedia": "https://en.wikipedia.org/wiki/Autumn_Leaves_%281945_song%29"
+  }
+ },
+ "star-dust": {
+  "composer": "Hoagy Carmichael",
+  "lyricist": "Mitchell Parish",
+  "publishYear": 1929,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1543022",
+   "wikipedia": "https://en.wikipedia.org/wiki/Stardust_%281927_song%29"
+  }
+ },
+ "willow-weep-for-me": {
+  "composer": "Ann Ronell",
+  "lyricist": "Ann Ronell",
+  "publishYear": 1932,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q820873",
+   "wikipedia": "https://en.wikipedia.org/wiki/Willow_Weep_for_Me"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Paul Whiteman",
+    "year": 1932
+   },
+   {
+    "artist": "Stan Kenton",
+    "year": 1946
+   },
+   {
+    "artist": "Art Tatum",
+    "year": 1949
+   },
+   {
+    "artist": "Billie Holiday",
+    "year": 1956
+   },
+   {
+    "artist": "Sarah Vaughan",
+    "year": 1957
+   },
+   {
+    "artist": "Red Garland",
+    "year": 1957
+   },
+   {
+    "artist": "Frank Sinatra",
+    "year": 1958
+   },
+   {
+    "artist": "The Thad Jones/Mel Lewis Orchestra",
+    "year": 1966
+   },
+   {
+    "artist": "Phil Woods",
+    "year": 1974
+   },
+   {
+    "artist": "Dorothy Donegan",
+    "year": 1975
+   },
+   {
+    "artist": "Carmel",
+    "year": 1984
+   },
+   {
+    "artist": "Andy Bey",
+    "year": 1995
+   }
+  ]
+ },
+ "what-s-new": {
+  "composer": "Bob Haggart",
+  "lyricist": "Johnny Burke",
+  "publishYear": 1939,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q2566573",
+   "wikipedia": "https://en.wikipedia.org/wiki/What%27s_New%3F"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Cannonball Adderley",
+    "year": 1958
+   },
+   {
+    "artist": "Louis Armstrong",
+    "year": 1957
+   },
+   {
+    "artist": "John Coltrane",
+    "year": 1963
+   },
+   {
+    "artist": "Larry Coryell",
+    "year": 2002
+   },
+   {
+    "artist": "Bob Crosby",
+    "year": 1938
+   },
+   {
+    "artist": "Ella Fitzgerald",
+    "year": 1957
+   },
+   {
+    "artist": "Dizzy Gillespie",
+    "year": 1975
+   },
+   {
+    "artist": "Dexter Gordon",
+    "year": 1969
+   },
+   {
+    "artist": "Billie Holiday",
+    "year": 1956
+   },
+   {
+    "artist": "Helen Merrill",
+    "year": 1954
+   },
+   {
+    "artist": "Frank Sinatra",
+    "year": 1958
+   },
+   {
+    "artist": "Golden Gate Quartet",
+    "year": 1939
+   }
+  ]
+ },
+ "honeysuckle-rose": {
+  "composer": "Fats Waller",
+  "lyricist": "Andy Razaf",
+  "publishYear": 1928,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q280907",
+   "wikipedia": "https://en.wikipedia.org/wiki/Honeysuckle_Rose_%28song%29"
+  }
+ },
+ "sweet-georgia-brown": {
+  "composer": "Ben Bernie, Maceo Pinkard",
+  "lyricist": "Kenneth Casey",
+  "publishYear": 1925,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1398573",
+   "wikipedia": "https://en.wikipedia.org/wiki/Sweet_Georgia_Brown"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Ben Bernie",
+    "year": 1925
+   },
+   {
+    "artist": "California Ramblers",
+    "year": 1925
+   },
+   {
+    "artist": "Ethel Waters",
+    "year": 1925
+   },
+   {
+    "artist": "Lillie Delk Christian",
+    "year": 1926
+   },
+   {
+    "artist": "Cab Calloway",
+    "year": 1931
+   },
+   {
+    "artist": "Coleman Hawkins",
+    "year": 1937
+   },
+   {
+    "artist": "Django Reinhardt",
+    "year": 1938
+   },
+   {
+    "artist": "Art Tatum",
+    "year": 1941
+   },
+   {
+    "artist": "Charlie Parker",
+    "year": 1943
+   },
+   {
+    "artist": "Bud Powell",
+    "year": 1950
+   },
+   {
+    "artist": "Red Norvo",
+    "year": 1950
+   },
+   {
+    "artist": "Gale Storm",
+    "year": 1956
+   }
+  ]
+ },
+ "caravan": {
+  "composer": "Duke Ellington, Juan Tizol",
+  "lyricist": "Irving Mills",
+  "publishYear": 1936,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q974709",
+   "wikipedia": "https://en.wikipedia.org/wiki/Caravan_%28Juan_Tizol_and_Duke_Ellington_song%29"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Cootie Williams"
+   },
+   {
+    "artist": "Juan Tizol"
+   },
+   {
+    "artist": "Barney Bigard"
+   },
+   {
+    "artist": "Harry Carney"
+   },
+   {
+    "artist": "Duke Ellington"
+   },
+   {
+    "artist": "Billy Taylor"
+   },
+   {
+    "artist": "Sonny Greer"
+   },
+   {
+    "artist": "Santo & Johnny",
+    "year": 1959
+   }
+  ]
+ },
+ "the-man-i-love": {
+  "composer": "George Gershwin",
+  "lyricist": "Ira Gershwin",
+  "publishYear": 1924,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1828805",
+   "wikipedia": "https://en.wikipedia.org/wiki/The_Man_I_Love_%28song%29"
+  },
+  "origin": "Lady, Be Good",
+  "originKind": "show"
+ },
+ "in-a-sentimental-mood": {
+  "composer": "Duke Ellington",
+  "lyricist": "Irving Mills, Manny Curtis",
+  "publishYear": 1935,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1660683",
+   "wikipedia": "https://en.wikipedia.org/wiki/In_a_Sentimental_Mood"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Django Reinhardt",
+    "year": 1937
+   },
+   {
+    "artist": "Sonny Rollins",
+    "year": 1953
+   },
+   {
+    "artist": "Art Tatum",
+    "year": 1955
+   },
+   {
+    "artist": "Ella Fitzgerald",
+    "year": 1957
+   },
+   {
+    "artist": "Chico Hamilton",
+    "year": 1958
+   },
+   {
+    "artist": "Tommy Flanagan",
+    "year": 1960
+   },
+   {
+    "artist": "Sarah Vaughan",
+    "year": 1961
+   },
+   {
+    "artist": "Duke Ellington & John Coltrane",
+    "year": 1962
+   },
+   {
+    "artist": "Lucky Thompson",
+    "year": 1964
+   },
+   {
+    "artist": "Nancy Wilson",
+    "year": 1969
+   },
+   {
+    "artist": "McCoy Tyner",
+    "year": 1974
+   },
+   {
+    "artist": "Arthur Blythe",
+    "year": 1979
+   }
+  ]
+ },
+ "st-louis-blues": {
+  "composer": "W. C. Handy",
+  "lyricist": "W. C. Handy",
+  "publishYear": 1914,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1086635",
+   "wikipedia": "https://en.wikipedia.org/wiki/Saint_Louis_Blues_%28song%29"
+  }
+ },
+ "how-high-the-moon": {
+  "composer": "Morgan Lewis",
+  "lyricist": "Nancy Hamilton",
+  "publishYear": 1940,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1631676",
+   "wikipedia": "https://en.wikipedia.org/wiki/How_High_the_Moon"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Lola Albright",
+    "year": 1958
+   },
+   {
+    "artist": "Ray Anthony",
+    "year": 2008
+   },
+   {
+    "artist": "Louis Armstrong",
+    "year": 1947
+   },
+   {
+    "artist": "Bluebird Records",
+    "year": 1940
+   },
+   {
+    "artist": "Chet Baker",
+    "year": 1959
+   },
+   {
+    "artist": "Jeff Beck",
+    "year": 2010
+   },
+   {
+    "artist": "Royal Roost Records",
+    "year": 1949
+   },
+   {
+    "artist": "The Jack Benny Show",
+    "year": 1940
+   },
+   {
+    "artist": "Randy Brooks",
+    "year": 1946
+   },
+   {
+    "artist": "Charles Brown",
+    "year": 1948
+   },
+   {
+    "artist": "Dave Brubeck"
+   },
+   {
+    "artist": "Oberlin College",
+    "year": 1953
+   }
+  ]
+ },
+ "oh-lady-be-good": {
+  "composer": "George Gershwin",
+  "lyricist": "Ira Gershwin",
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1131715",
+   "wikipedia": "https://en.wikipedia.org/wiki/Oh%2C_Lady_Be_Good%21"
+  },
+  "origin": "Lady, Be Good!",
+  "originKind": "show",
+  "famousRecordings": [
+   {
+    "artist": "Carl Fenton",
+    "year": 1924
+   },
+   {
+    "artist": "Paul Whiteman",
+    "year": 1924
+   },
+   {
+    "artist": "Cliff \"Ukulele Ike\" Edwards",
+    "year": 1925
+   },
+   {
+    "artist": "Jack Hylton",
+    "year": 1926
+   },
+   {
+    "artist": "Buddy Lee",
+    "year": 1926
+   },
+   {
+    "artist": "Buck and Bubbles",
+    "year": 1933
+   },
+   {
+    "artist": "Django Reinhardt",
+    "year": 1934
+   },
+   {
+    "artist": "Red Norvo",
+    "year": 1936
+   },
+   {
+    "artist": "Benny Goodman",
+    "year": 1936
+   },
+   {
+    "artist": "Lester Young",
+    "year": 1936
+   },
+   {
+    "artist": "Slim & Slam",
+    "year": 1938
+   },
+   {
+    "artist": "Count Basie",
+    "year": 1939
+   }
+  ]
+ },
+ "take-the-a-train": {
+  "composer": "Billy Strayhorn",
+  "lyricist": "Billy Strayhorn",
+  "publishYear": 1941,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q1692496",
+   "wikipedia": "https://en.wikipedia.org/wiki/Take_the_%22A%22_Train"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Duke Ellington",
+    "year": 1941
+   },
+   {
+    "artist": "Delta Rhythm Boys",
+    "year": 1942
+   },
+   {
+    "artist": "Bob Wills and His Texas Playboys",
+    "year": 1947
+   },
+   {
+    "artist": "Duke Ellington",
+    "year": 1952
+   },
+   {
+    "artist": "Clifford Brown",
+    "year": 1955
+   },
+   {
+    "artist": "Ella Fitzgerald",
+    "year": 1957
+   },
+   {
+    "artist": "Anita O'Day",
+    "year": 1958
+   },
+   {
+    "artist": "Johnny Dankworth",
+    "year": 1959
+   },
+   {
+    "artist": "Billy Strayhorn"
+   },
+   {
+    "artist": "Charles Mingus",
+    "year": 1961
+   },
+   {
+    "artist": "Sun Ra",
+    "year": 1977
+   },
+   {
+    "artist": "Joe Henderson",
+    "year": 1991
+   }
+  ]
+ },
+ "embraceable-you": {
+  "composer": "George Gershwin",
+  "lyricist": "Ira Gershwin",
+  "publishYear": 1930,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q753607",
+   "wikipedia": "https://en.wikipedia.org/wiki/Embraceable_You"
+  },
+  "famousRecordings": [
+   {
+    "artist": "Irene Cara"
+   },
+   {
+    "artist": "Nat King Cole",
+    "year": 1943
+   },
+   {
+    "artist": "Bing Crosby",
+    "year": 1947
+   },
+   {
+    "artist": "Ella Fitzgerald",
+    "year": 1959
+   },
+   {
+    "artist": "Jane Froman",
+    "year": 1952
+   },
+   {
+    "artist": "Judy Garland",
+    "year": 1943
+   },
+   {
+    "artist": "Frank Sinatra",
+    "year": 1944
+   },
+   {
+    "artist": "Erroll Garner"
+   },
+   {
+    "artist": "Herbie Hancock",
+    "year": 1998
+   },
+   {
+    "artist": "Billie Holiday",
+    "year": 1944
+   },
+   {
+    "artist": "Body and Soul",
+    "year": 1957
+   },
+   {
+    "artist": "Chet Baker",
+    "year": 1957
+   }
+  ]
+ },
+ "on-green-dolphin-street": {
+  "composer": "Bronisław Kaper",
+  "lyricist": "Ned Washington",
+  "publishYear": 1947,
+  "sources": {
+   "wikidata": "https://www.wikidata.org/wiki/Q2023627",
+   "wikipedia": "https://en.wikipedia.org/wiki/On_Green_Dolphin_Street_%28song%29"
+  },
+  "origin": "Green Dolphin Street",
+  "originKind": "film"
+ }
+}

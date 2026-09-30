@@ -107,7 +107,7 @@ export function ExportDialog({
         if (e.target === ref.current) onClose();
       }}
       className={cx(
-        "m-0 max-h-none max-w-none bg-transparent p-0 text-ink backdrop:bg-[rgb(6_4_5/0.72)] backdrop:backdrop-blur-[3px]",
+        "m-0 max-h-none max-w-none bg-transparent p-0 text-ink backdrop:bg-[color-mix(in_srgb,var(--bg)_72%,transparent)] backdrop:backdrop-blur-[3px]",
         "fixed inset-0 h-dvh w-full sm:m-auto sm:h-fit sm:max-h-[92dvh] sm:w-[min(760px,94vw)]",
       )}
     >
@@ -149,8 +149,8 @@ function ExportPanel({
   };
 
   return (
-    <div className="relative flex h-full max-h-dvh flex-col overflow-hidden bg-panel shadow-[0_30px_90px_rgb(0_0_0/0.85)] sm:max-h-[92dvh] sm:rounded-[20px] sm:border sm:border-line-strong">
-      <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[radial-gradient(closest-side,rgb(255_43_69/0.16),transparent)] blur-2xl" />
+    <div className="relative flex h-full max-h-dvh flex-col overflow-hidden bg-panel shadow-[0_30px_90px_rgb(0_0_0/0.85)] sm:max-h-[92dvh] sm:rounded-panel sm:border sm:border-line-strong">
+      <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--accent)_16%,transparent),transparent)] blur-2xl" />
 
       <div className="relative flex items-start justify-between gap-4 px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-5 sm:px-8 sm:pt-7">
         <div className="min-w-0">
@@ -296,7 +296,7 @@ function TextTab({
             aria-label="Export preview"
             className={cx(
               "max-h-[40dvh] min-h-40 overflow-auto px-4 py-4 whitespace-pre text-ink-2 focus-visible:outline-offset-[-2px] sm:max-h-[320px] sm:px-5",
-              serifPreview ? "font-serif text-[16px] leading-relaxed text-ink" : "font-mono text-[12px] leading-[1.7]",
+              serifPreview ? "font-serif title-plain text-[16px] leading-relaxed text-ink" : "font-mono text-[12px] leading-[1.7]",
             )}
           >
             {text}
@@ -304,7 +304,7 @@ function TextTab({
         </Card>
 
         {error && (
-          <p role="alert" className="rounded-[10px] border border-[rgb(255_43_69/0.35)] bg-[rgb(255_43_69/0.08)] px-3.5 py-2.5 text-sm text-neon-hot">
+          <p role="alert" className="rounded-control border border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-3.5 py-2.5 text-sm text-neon-hot">
             {error}
           </p>
         )}
@@ -342,7 +342,7 @@ function ThemePreview({ theme }: { theme: PdfTheme }) {
         noir ? "bg-[#0a0708] ring-1 ring-white/[0.06]" : "bg-white",
       )}
     >
-      {noir && <div className="pointer-events-none absolute -top-6 -right-6 h-16 w-16 rounded-full bg-[radial-gradient(circle,rgb(255_43_69/0.35),transparent_70%)]" />}
+      {noir && <div className="pointer-events-none absolute -top-6 -right-6 h-16 w-16 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--accent)_35%,transparent),transparent_70%)]" />}
       <div
         className={cx(
           "rounded-[3px] border px-1 py-[3px] text-center",
@@ -410,7 +410,7 @@ function OptionCard({ on, onSelect, preview, title, description }: { on: boolean
       className={cx(
         "relative flex w-full items-center gap-4 rounded-2xl border p-3.5 text-left transition-[border-color,background-color,box-shadow] duration-150 sm:p-4",
         on
-          ? "border-[rgb(255_43_69/0.55)] bg-surface-2"
+          ? "border-[color-mix(in_srgb,var(--accent)_55%,transparent)] bg-surface-2"
           : "border-line bg-surface/80 hover:border-line-strong hover:bg-surface-2/80",
       )}
     >
@@ -423,7 +423,7 @@ function OptionCard({ on, onSelect, preview, title, description }: { on: boolean
         aria-hidden
         className={cx(
           "absolute top-3 right-3 grid h-5 w-5 place-items-center rounded-full border transition-colors",
-          on ? "border-neon bg-neon text-white" : "border-line-strong",
+          on ? "border-neon bg-neon text-neon-ink" : "border-line-strong",
         )}
       >
         {on && <Check className="h-3 w-3" strokeWidth={2.5} />}
@@ -532,7 +532,7 @@ function PdfTab({
         </Section>
 
         {error && (
-          <p role="alert" className="rounded-[10px] border border-[rgb(255_43_69/0.35)] bg-[rgb(255_43_69/0.08)] px-3.5 py-2.5 text-sm text-neon-hot">
+          <p role="alert" className="rounded-control border border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-3.5 py-2.5 text-sm text-neon-hot">
             {error}
           </p>
         )}

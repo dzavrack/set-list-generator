@@ -2,7 +2,7 @@
 import type { GenreConfig, Repertoire, Song, Status } from "../types";
 
 export const JAZZ: GenreConfig = {
-  key: "jazz", name: "Jazz", sign: "Jazz Gig Book", noun: "tune", tagline: "",
+  key: "jazz", name: "Jazz", sign: "Jazz Book", noun: "tune", tagline: "",
   styles: { gy: "Gypsy jazz", tr: "Trad / New Orleans", sw: "Swing era", sb: "Songbook standards", bp: "Bebop", hb: "Hard bop", md: "Modal / post-bop", la: "Bossa / Latin", bl: "Ballad", bu: "Blues", wz: "Waltz", po: "Pop / soul", xm: "Holiday" },
   neighbors: { gy: ["sw", "tr"], tr: ["sw", "gy"], sw: ["tr", "gy", "sb"], sb: ["sw", "bl"], bp: ["hb", "sw"], hb: ["bp", "md"], md: ["hb"], la: ["sb"], bl: ["sb"], bu: ["hb", "sw", "bp"], wz: ["sb", "bl"], po: ["sb"], xm: ["sb"] },
   words: [
@@ -25,7 +25,7 @@ export const JAZZ: GenreConfig = {
 };
 
 export const ROCK: GenreConfig = {
-  key: "rock", name: "Rock", sign: "Rock Show", noun: "song", tagline: "",
+  key: "rock", name: "Rock", sign: "Rock Book", noun: "song", tagline: "",
   styles: { rr: "50s rock & roll", cr: "Classic rock", ar: "Arena & 80s rock", pk: "Punk & new wave", bl: "Slow songs", up: "Up-tempo", pa: "Party & singalong" },
   neighbors: { bl: [], up: [], pa: [], rr: [], cr: ["ar"], ar: ["cr", "pk"], pk: ["ar"] },
   words: [
