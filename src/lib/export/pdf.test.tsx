@@ -11,7 +11,7 @@ const R = await import("@react-pdf/renderer");
 
 describe("set list PDF", () => {
   for (const theme of ["noir", "print"] as PdfTheme[]) {
-    for (const layout of ["one-page", "set-per-page"] as PdfLayout[]) {
+    for (const layout of ["plain", "one-page", "set-per-page", "stage", "compact"] as PdfLayout[]) {
       it(`renders ${theme} / ${layout}`, async () => {
         const doc = createSetListDocument(R, FIXTURE_SET_LIST, {
           theme, layout, showKeys: true, showFeels: true, showTimes: true, showBackups: true, showCredits: true,
@@ -40,7 +40,7 @@ describe("set list PDF", () => {
   ];
   for (const [name, sl] of cases) {
     it(`renders ${name}`, async () => {
-      for (const layout of ["one-page", "set-per-page"] as PdfLayout[]) {
+      for (const layout of ["plain", "one-page", "set-per-page", "stage", "compact"] as PdfLayout[]) {
         const buf = await R.renderToBuffer(createSetListDocument(R, sl, { theme: "noir", layout, fontsUrl }));
         expect(buf.subarray(0, 5).toString()).toBe("%PDF-");
         if (process.env.PDF_OUT) writeFileSync(join(process.env.PDF_OUT, `${name}-${layout}.pdf`), buf);

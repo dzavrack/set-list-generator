@@ -272,7 +272,7 @@ describe("buildSetList", () => {
   it("adds backups and a name", () => {
     const sl = build({ hours: 1, styles: ["sb"], date: "2026-10-02" });
     expect(sl.backups).toHaveLength(3);
-    expect(sl.name).toBe("Friday Standards Gig");
+    expect(sl.name).toBe("Set List");
     expect(build({ hours: 1 }, { name: "Mine" }).name).toBe("Mine");
   });
 

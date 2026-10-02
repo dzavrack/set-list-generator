@@ -74,10 +74,12 @@ export function setListTotals(sl: SetList): { sets: number; songs: number; minut
   };
 }
 
+/** How each flag reads on an export. An empty label is never printed. */
 export const FLAG_LABELS: Record<ItemFlag, string> = {
   shaky: "shaky",
   "other-style": "off-style",
-  picked: "request",
+  picked: "",
+  request: "request",
 };
 
 /** "Joseph Kosma, 1945" from the catalog, or "" when nothing is known. */
@@ -122,7 +124,7 @@ function setHeading(set: GigSet, i: number): string {
 }
 
 function flagText(item: SetItem): string {
-  return (item.flags ?? []).map((f) => FLAG_LABELS[f] ?? f).join(", ");
+  return (item.flags ?? []).map((f) => FLAG_LABELS[f] ?? f).filter(Boolean).join(", ");
 }
 
 function notesBlock(sl: SetList): string[] {

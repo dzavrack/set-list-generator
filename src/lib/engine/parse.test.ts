@@ -131,9 +131,15 @@ describe("describeRequest / autoName", () => {
     const s = describeRequest({ styles: ["cr", "up"], count: 10, setting: "dance", allowShaky: false, favourites: true, decades: ["1980"] }, ROCK);
     expect(s).toBe("10 songs · Classic rock · Dance · '80s · leaning up-tempo · crowd favourites · no shaky songs");
   });
-  it("names", () => {
-    expect(autoName({ styles: ["bl", "sb"], setting: "standard", allowShaky: true, date: "2026-10-02" }, JAZZ)).toBe("Friday Ballads & Standards Gig");
-    expect(autoName({ styles: ["cr", "up"], setting: "standard", allowShaky: true, decades: ["1980"], count: 8 }, ROCK)).toBe("'80s Classic rock Songs");
+  it("names: plain, never the styles", () => {
+    // no date
+    expect(autoName({ styles: ["cr", "up"], setting: "standard", allowShaky: true, decades: ["1980"], count: 8 }, ROCK)).toBe("Set List");
+    // a venue alone still has no date
+    expect(autoName({ styles: [], setting: "standard", allowShaky: true, venue: "The Blue Note" }, JAZZ)).toBe("Set List");
+    // a date alone still has no venue
+    expect(autoName({ styles: ["bl", "sb"], setting: "standard", allowShaky: true, date: "2026-10-02" }, JAZZ)).toBe("Set List");
+    // date and venue
+    expect(autoName({ styles: ["bl"], setting: "standard", allowShaky: true, date: "2026-10-02", venue: "The Blue Note" }, JAZZ)).toBe("Friday, Oct 2 · The Blue Note Set List");
   });
 });
 

@@ -15,7 +15,7 @@ import { readKey, writeKey } from "@/lib/storage";
 import { GENRES } from "@/lib/genres";
 import { Check, Copy, Download, FileText, Loader2, Share2, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Toggle } from "@/components/ui/Field";
+import { Field, Input, Toggle } from "@/components/ui/Field";
 import { Card, Tabs } from "@/components/ui/Page";
 import { Segmented } from "@/components/ui/Segmented";
 import { cx } from "@/components/ui/cx";
@@ -78,11 +78,14 @@ export function ExportDialog({
   songs,
   open,
   onClose,
+  onSetListChange,
 }: {
   setList: SetList;
   songs?: Map<string, Song>;
   open: boolean;
   onClose: () => void;
+  /** Saves edits made while exporting (the venue typed in for the PDF). */
+  onSetListChange?: (sl: SetList) => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -111,7 +114,7 @@ export function ExportDialog({
         "fixed inset-0 h-dvh w-full sm:m-auto sm:h-fit sm:max-h-[92dvh] sm:w-[min(760px,94vw)]",
       )}
     >
-      {open && <ExportPanel setList={setList} songs={songs} onClose={onClose} titleId={titleId} />}
+      {open && <ExportPanel setList={setList} songs={songs} onClose={onClose} titleId={titleId} onSetListChange={onSetListChange} />}
     </dialog>
   );
 }
@@ -121,11 +124,13 @@ function ExportPanel({
   songs,
   onClose,
   titleId,
+  onSetListChange,
 }: {
   setList: SetList;
   songs?: Map<string, Song>;
   onClose: () => void;
   titleId: string;
+  onSetListChange?: (sl: SetList) => void;
 }) {
   const [prefs, setPrefs] = useState<ExportPrefs>(loadPrefs);
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -189,7 +194,7 @@ function ExportPanel({
         {prefs.tab === "text" ? (
           <TextTab setList={setList} songs={songs} prefs={prefs} update={update} />
         ) : (
-          <PdfTab setList={setList} songs={songs} prefs={prefs.pdf} update={updatePdf} />
+          <PdfTab setList={setList} songs={songs} prefs={prefs.pdf} update={updatePdf} onSetListChange={onSetListChange} />
         )}
       </div>
     </div>
@@ -373,6 +378,40 @@ function ThemePreview({ theme }: { theme: PdfTheme }) {
 }
 
 function LayoutPreview({ layout }: { layout: PdfLayout }) {
+  if (layout === "plain")
+    return (
+      <div aria-hidden className="flex h-11 w-[76px] shrink-0 items-center justify-center">
+        <div className="flex h-11 w-9 flex-col gap-[2px] rounded-[3px] border border-line-strong bg-bg p-[4px]">
+          <span className="mb-[1px] h-[2.5px] w-4 rounded-sm bg-ink/80" />
+          {Array.from({ length: 7 }, (_, r) => (
+            <span key={r} className="h-[1.5px] rounded-full bg-ink-2/60" style={{ width: `${55 + ((r * 19) % 40)}%` }} />
+          ))}
+        </div>
+      </div>
+    );
+  if (layout === "stage")
+    return (
+      <div aria-hidden className="flex h-11 w-[76px] shrink-0 items-center justify-center gap-1">
+        {[0, 1].map((p) => (
+          <div key={p} className="flex h-11 w-8 flex-col gap-[3px] rounded-[3px] border border-line-strong bg-bg p-[4px]">
+            {[0, 1, 2, 3].map((r) => (
+              <span key={r} className="h-[5px] rounded-[1px] bg-ink/80" style={{ width: `${70 + ((r * 13) % 30)}%` }} />
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  if (layout === "compact")
+    return (
+      <div aria-hidden className="flex h-11 w-[76px] shrink-0 items-center justify-center">
+        <div className="flex h-11 w-9 flex-col gap-[1.5px] rounded-[3px] border border-line-strong bg-bg p-[4px]">
+          <span className="mb-[1px] h-[3px] w-4 rounded-sm bg-neon/80" />
+          {Array.from({ length: 9 }, (_, r) => (
+            <span key={r} className={cx("h-[1.5px] rounded-full", r === 4 ? "w-3 bg-neon/60" : "bg-ink-2/60")} />
+          ))}
+        </div>
+      </div>
+    );
   return (
     <div aria-hidden className="flex h-11 w-[76px] shrink-0 items-center justify-center gap-1">
       {layout === "one-page" ? (
@@ -437,12 +476,23 @@ function PdfTab({
   songs,
   prefs,
   update,
+  onSetListChange,
 }: {
   setList: SetList;
   songs?: Map<string, Song>;
   prefs: PdfPrefs;
   update: (p: Partial<PdfPrefs>) => void;
+  onSetListChange?: (sl: SetList) => void;
 }) {
+  // The venue heads the PDF in bold and the date sits under it, so both are asked for here when the
+  // list doesn't have them yet. Whatever is typed is saved back to the set list.
+  const [venue, setVenue] = useState(setList.venue ?? "");
+  const [date, setDate] = useState(setList.date ?? "");
+  const needsVenue = !setList.venue?.trim();
+  const needsDate = !setList.date;
+  const venueReady = !!venue.trim();
+  const dateReady = !!date;
+  const missing = [!venueReady && "venue", !dateReady && "date"].filter(Boolean).join(" and ");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
@@ -473,7 +523,9 @@ function PdfTab({
     setBusy(true);
     setError(null);
     try {
-      await downloadSetListPdf(setList, { ...prefs, showKeys: prefs.showKeys && hasKeys, showCredits: prefs.showCredits && hasCredits, songs });
+      const sl = needsVenue || needsDate ? { ...setList, venue: venue.trim(), date, updatedAt: new Date().toISOString() } : setList;
+      if (needsVenue || needsDate) onSetListChange?.(sl);
+      await downloadSetListPdf(sl, { ...prefs, showKeys: prefs.showKeys && hasKeys, showCredits: prefs.showCredits && hasCredits, songs });
       setDone(true);
     } catch (e) {
       console.error(e);
@@ -489,11 +541,29 @@ function PdfTab({
 
   const empty = setList.sets.every((s) => s.items.length === 0);
   const noun = GENRES[setList.genre]?.noun ?? "song";
-  const pages = prefs.layout === "one-page" ? "1 page" : `${setList.sets.length} ${setList.sets.length === 1 ? "page" : "pages"}`;
+  const perSet = prefs.layout === "set-per-page" || prefs.layout === "stage";
+  const pages = perSet ? `${setList.sets.length} ${setList.sets.length === 1 ? "page" : "pages"}` : "1 page";
 
   return (
     <div className="flex min-h-full flex-col">
       <div className="flex flex-col gap-7 px-5 py-6 sm:px-8">
+        {(needsVenue || needsDate) && (
+          <Section label="The gig">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_200px]">
+              {needsVenue && (
+                <Field label="Where's the gig?" hint="Printed in bold at the top of the PDF.">
+                  <Input value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="e.g. The Blue Note" autoComplete="off" />
+                </Field>
+              )}
+              {needsDate && (
+                <Field label="When is it?" hint="Printed under the venue.">
+                  <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="tabular font-mono" />
+                </Field>
+              )}
+            </div>
+            <p className="mt-2.5 text-xs text-faint">Both are needed for the PDF, and saved with this set list.</p>
+          </Section>
+        )}
         <Section label="Theme">
           <div role="radiogroup" aria-label="PDF theme" className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {PDF_THEMES.map((t) => (
@@ -511,7 +581,13 @@ function PdfTab({
         </Section>
 
         <Section label="Show on the page">
-          <Card className="grid grid-cols-1 gap-x-8 gap-y-5 p-5 sm:grid-cols-2">
+          {prefs.layout === "plain" && <p className="-mt-1 mb-3 text-[13px] text-muted">Plain prints only the titles, so these are off.</p>}
+          {prefs.layout !== "plain" && (
+            <p className="-mt-1 mb-3 text-[13px] text-muted">
+              {`Requests print as a “request” tag. To mark one, close this and click the hand on the ${noun} in the set list.`}
+            </p>
+          )}
+          <Card className={cx("grid grid-cols-1 gap-x-8 gap-y-5 p-5 sm:grid-cols-2", prefs.layout === "plain" && "pointer-events-none opacity-40")} aria-disabled={prefs.layout === "plain" || undefined}>
             <Toggle checked={prefs.showKeys && hasKeys} disabled={!hasKeys} onChange={(v) => update({ showKeys: v })} label="Keys" hint={hasKeys ? `The key you call each ${noun} in` : "No keys set yet"} />
             <Toggle checked={prefs.showFeels} onChange={(v) => update({ showFeels: v })} label="Feels" hint={hasFeels ? "Swing, ballad, bossa and so on" : "No feels set yet"} />
             <Toggle checked={prefs.showTimes} onChange={(v) => update({ showTimes: v })} label="Times" hint={`Minutes per ${noun} and per set`} />
@@ -539,12 +615,12 @@ function PdfTab({
       </div>
 
       <ActionBar>
-        <Button variant="primary" size="lg" className="flex-1 sm:min-w-52 sm:flex-none" onClick={download} disabled={busy || empty} aria-busy={busy}>
+        <Button variant="primary" size="lg" className="flex-1 sm:min-w-52 sm:flex-none" onClick={download} disabled={busy || empty || !venueReady || !dateReady} aria-busy={busy}>
           {busy ? <Loader2 className="animate-spin" strokeWidth={2} /> : done ? <Check strokeWidth={2} /> : <Download strokeWidth={1.75} />}
           {busy ? "Building PDF…" : done ? "Downloaded" : "Download PDF"}
         </Button>
         <span className="tabular hidden font-mono text-xs text-muted sm:inline">
-          {empty ? "Add songs to export" : `${PDF_THEMES.find((t) => t.value === prefs.theme)?.label ?? prefs.theme} · ${pages} · Letter`}
+          {empty ? "Add songs to export" : missing ? `Add the ${missing} to export` : `${PDF_THEMES.find((t) => t.value === prefs.theme)?.label ?? prefs.theme} · ${pages} · Letter`}
         </span>
         <span aria-live="polite" className="sr-only">
           {busy ? "Building PDF" : done ? "PDF downloaded" : ""}

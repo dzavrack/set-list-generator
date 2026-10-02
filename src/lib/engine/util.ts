@@ -83,6 +83,12 @@ export function weekdayName(iso: string): string {
   const d = isoToUtc(iso);
   return d ? DAY_NAMES[d.getUTCDay()] : "";
 }
+/** "Friday, Oct 2" */
+export function longDate(iso: string): string {
+  const d = isoToUtc(iso);
+  if (!d) return iso;
+  return `${DAY_NAMES[d.getUTCDay()]}, ${MONTH_SHORT[d.getUTCMonth()]} ${d.getUTCDate()}`;
+}
 /** "Fri, Oct 2" */
 export function shortDate(iso: string): string {
   const d = isoToUtc(iso);

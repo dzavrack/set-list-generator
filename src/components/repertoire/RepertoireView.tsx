@@ -43,7 +43,8 @@ function Repertoire() {
   const dq = useDeferredValue(q);
   const [style, setStyle] = useState("all");
   const [scope, setScope] = useState("all");
-  const [sort, setSort] = useState("popular");
+  // Browse lists the book A–Z by default; "Most played" is still in the menu.
+  const [sort, setSort] = useState("az");
   const [shown, setShown] = useState(PAGE);
   const [open, setOpen] = useState<Song | null>(null);
   const [adding, setAdding] = useState(false);
@@ -91,7 +92,7 @@ function Repertoire() {
     }
     const by = arr.slice();
     if (sort === "popular") by.sort((a, b) => (a.rank ?? 1e9) - (b.rank ?? 1e9));
-    if (sort === "az") by.sort((a, b) => sortTitle(a.title).localeCompare(sortTitle(b.title)));
+    if (sort === "az") by.sort((a, b) => sortTitle(a.title).localeCompare(sortTitle(b.title), undefined, { numeric: true, sensitivity: "base" }));
     if (sort === "old") by.sort((a, b) => (a.year ?? 9999) - (b.year ?? 9999));
     if (sort === "new") by.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
     if (sort === "artist") by.sort((a, b) => (a.artist ?? "").replace(/^The /, "").localeCompare((b.artist ?? "").replace(/^The /, "")));
@@ -157,8 +158,8 @@ function Repertoire() {
               {myBooks.length > 0 && <optgroup label="My lists">{myBooks.map((b) => <option key={b.id} value={`book:${b.id}`}>{b.name}</option>)}</optgroup>}
             </Select>
             <Select aria-label="Sort" value={sort} onChange={(e) => setSort(e.target.value)} className="w-auto min-w-[150px] flex-1 sm:flex-none">
-              <option value="popular">Most played</option>
               <option value="az">A–Z</option>
+              <option value="popular">Most played</option>
               {genreKey !== "jazz" && <option value="old">Oldest first</option>}
               {genreKey !== "jazz" && <option value="new">Newest first</option>}
               {genreKey !== "jazz" && <option value="artist">By artist</option>}
@@ -226,7 +227,7 @@ function Repertoire() {
                 const meta = [s.artist, s.year].filter(Boolean).join(" · ");
                 return (
                   <li key={s.id} data-tone={e?.status} className="song-row group flex items-center gap-4 border-b border-line px-4 py-3.5 transition-colors last:border-0 hover:bg-[color-mix(in_srgb,var(--ink)_2%,transparent)] sm:gap-5 sm:px-6">
-                    <span className="tabular hidden w-8 shrink-0 text-right font-mono text-xs text-faint sm:block">{s.rank ?? "·"}</span>
+                    <span className="tabular hidden w-8 shrink-0 text-right font-mono text-xs text-faint sm:block">{sort === "popular" ? (s.rank ?? "·") : ""}</span>
                     <button type="button" onClick={() => setOpen(s)} className="min-w-0 flex-1 text-left">
                       <span className="flex items-center gap-2">
                         <span className="truncate font-serif title-plain text-[21px] leading-tight text-ink group-hover:text-white">{s.title}</span>

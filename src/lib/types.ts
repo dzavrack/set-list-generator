@@ -153,7 +153,11 @@ export interface GigRequest {
   exclude?: string[];
 }
 
-export type ItemFlag = "shaky" | "other-style" | "picked";
+/**
+ * "picked": the player chose this song themselves (builder bookkeeping, never printed).
+ * "request": someone asked for it; the player marks this in the set list and exports show it.
+ */
+export type ItemFlag = "shaky" | "other-style" | "picked" | "request";
 
 export interface SetItem {
   songId: string;

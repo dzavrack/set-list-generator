@@ -18,7 +18,7 @@ import {
 type ReactPdf = typeof import("@react-pdf/renderer");
 
 export type PdfTheme = "noir" | "print";
-export type PdfLayout = "one-page" | "set-per-page";
+export type PdfLayout = "plain" | "one-page" | "set-per-page" | "stage" | "compact";
 
 export interface PdfOptions {
   theme: PdfTheme;
@@ -52,8 +52,11 @@ export const PDF_THEMES: { value: PdfTheme; label: string; description: string }
 ];
 
 export const PDF_LAYOUTS: { value: PdfLayout; label: string; description: string }[] = [
+  { value: "plain", label: "Plain", description: "Just the set list: venue and date, then the numbered titles. Nothing else." },
   { value: "one-page", label: "One page", description: "Every set on a single sheet, side by side." },
   { value: "set-per-page", label: "Set per page", description: "One set per page in big type for the music stand." },
+  { value: "stage", label: "Stage floor", description: "Huge bold titles, one set per page. Tape it down and read it from a few feet away." },
+  { value: "compact", label: "Compact", description: "Every set in one tight column. A pocket copy, or a long night on as few pages as possible." },
 ];
 
 // ---------------------------------------------------------------------------
@@ -205,7 +208,7 @@ function creditFor(item: SetItem, opts: PdfOptions): string {
 }
 
 function flagTags(item: SetItem): string[] {
-  return (item.flags ?? []).map((f) => (f === "picked" ? "request" : FLAG_LABELS[f] ?? f));
+  return (item.flags ?? []).map((f) => FLAG_LABELS[f] ?? f).filter(Boolean);
 }
 
 // ---------------------------------------------------------------------------
@@ -223,8 +226,12 @@ export function createSetListDocument(R: ReactPdf, sl: SetList, options: Partial
   const totals = setListTotals(sl);
   const dateLong = formatGigDate(sl.date);
   const dateShort = formatGigDate(sl.date, "short");
-  const title = sl.name || sl.venue || "Set list";
-  const subline = [dateLong, sl.venue && sl.venue !== title ? sl.venue : ""].filter(Boolean).join("  ·  ");
+  // The venue is the headline, in bold. A name the player gave the list (not an automatic
+  // "... Set List") rides along under it with the date.
+  const venue = sl.venue?.trim() ?? "";
+  const customName = sl.name && !/set list$/i.test(sl.name.trim()) && sl.name !== venue ? sl.name : "";
+  const title = venue || sl.name || "Set list";
+  const subline = [dateLong, venue ? customName : ""].filter(Boolean).join("  ·  ");
   const footerLeft = [title, dateShort].filter(Boolean).join("  ·  ").toUpperCase();
   const statLine = [
     `${totals.sets} ${totals.sets === 1 ? "set" : "sets"}`,
@@ -654,7 +661,8 @@ export function createSetListDocument(R: ReactPdf, sl: SetList, options: Partial
         <Haze />
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 12 }}>
           <Text style={[s.eyebrow, { flex: 1, marginRight: 16, maxLines: 1, textOverflow: "ellipsis" }]}>
-            {[title, dateShort, sl.venue !== title ? sl.venue : ""].filter(Boolean).join("  ·  ")}
+            <Text style={{ fontFamily: FAMILY.body, fontWeight: 700, fontSize: 9, letterSpacing: 0.6, color: p.ink }}>{title.toUpperCase()}</Text>
+            {dateShort ? `   ·   ${dateShort}` : ""}
           </Text>
           <Text style={[s.eyebrow, { color: p.accent, flexShrink: 0 }]}>{`Set ${index + 1} of ${sl.sets.length}`}</Text>
         </View>
@@ -768,11 +776,119 @@ export function createSetListDocument(R: ReactPdf, sl: SetList, options: Partial
     );
   };
 
+  // --- plain -------------------------------------------------------------
+  // Just the set list: the venue and date, then each set's numbered titles. None of the extras.
+
+  const PlainPage = () => (
+    <Page size={size} style={[s.page, { paddingBottom: MARGIN_TOP }]}>
+      <View style={{ marginBottom: 18 }}>
+        <Text style={{ fontFamily: FAMILY.body, fontWeight: 700, fontSize: 20, color: p.ink }}>{title}</Text>
+        {dateLong ? <Text style={{ fontFamily: FAMILY.body, fontSize: 11, color: p.ink2, marginTop: 3 }}>{dateLong}</Text> : null}
+      </View>
+      {sl.sets.map((set, i) => (
+        <View key={i} style={{ marginBottom: 16 }}>
+          <Text style={{ fontFamily: FAMILY.body, fontWeight: 700, fontSize: 12, color: p.ink, marginBottom: 6 }} minPresenceAhead={40}>
+            {set.name || `Set ${i + 1}`}
+          </Text>
+          {set.items.map((it, j) => (
+            <View key={j} wrap={false} style={{ flexDirection: "row", paddingVertical: 2.5 }}>
+              <Text style={{ width: 22, fontFamily: FAMILY.body, fontSize: 12, color: p.muted }}>{`${j + 1}.`}</Text>
+              <Text style={{ flex: 1, fontFamily: FAMILY.body, fontSize: 12, color: p.ink }}>{it.title}</Text>
+            </View>
+          ))}
+        </View>
+      ))}
+    </Page>
+  );
+
+  // --- stage floor -------------------------------------------------------
+  // One set per page, titles only, as big and bold as the page allows: read from a few feet away.
+
+  const StagePage = ({ index }: { index: number }) => {
+    const set = sl.sets[index];
+    const items = set.items;
+    const name = set.name || `Set ${index + 1}`;
+    const avail = pageH - MARGIN_TOP - MARGIN_BOTTOM - 64;
+    const keyW = (scale: number) => (opts.showKeys ? scale * 2.1 : 0);
+    const rowsH = (scale: number) =>
+      items.reduce((sum, it) => {
+        const lines = Math.max(1, Math.ceil((it.title.length * scale * 0.5) / (contentW - scale * 1.4 - keyW(scale))));
+        return sum + lines * scale * 1.02 + scale * 0.42 + 1;
+      }, 0);
+    let scale = 56;
+    while (scale > 16 && rowsH(scale) > avail) scale -= 1;
+    return (
+      <Page size={size} style={s.page}>
+        <Haze />
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 8 }}>
+          <Text style={{ flex: 1, marginRight: 16, fontFamily: FAMILY.body, fontWeight: 700, fontSize: 11, color: p.ink, maxLines: 1, textOverflow: "ellipsis" }}>
+            {title.toUpperCase()}
+            <Text style={{ fontWeight: 400, color: p.muted }}>{dateShort ? `   ·   ${dateShort}` : ""}</Text>
+          </Text>
+          <Text style={{ fontFamily: FAMILY.display, fontWeight: 800, fontSize: 20, color: p.accent, textTransform: "uppercase", letterSpacing: 1 }}>
+            {name}
+            <Text style={{ fontFamily: FAMILY.mono, fontWeight: 400, fontSize: 7, letterSpacing: 1.6, color: p.muted }}>{`   ${index + 1} OF ${sl.sets.length}`}</Text>
+          </Text>
+        </View>
+        <View style={{ borderTopWidth: 2, borderTopColor: p.ruleStrong, paddingTop: 4 }}>
+          {items.map((it, j) => (
+            <View key={j} wrap={false} style={{ flexDirection: "row", alignItems: "center", paddingVertical: scale * 0.2, borderBottomWidth: j === items.length - 1 ? 0 : 0.6, borderBottomColor: p.rule }}>
+              <Text style={{ width: scale * 1.4, fontFamily: FAMILY.display, fontWeight: 700, fontSize: scale * 0.7, color: p.accent, lineHeight: 1 }}>{String(j + 1)}</Text>
+              <View style={{ flex: 1, flexDirection: "row", alignItems: "center", flexWrap: "wrap" }}>
+                <Text style={{ fontFamily: FAMILY.display, fontWeight: 800, fontSize: scale, color: p.ink, textTransform: "uppercase", lineHeight: 1.02, letterSpacing: 0.5 }}>
+                  {it.title}
+                </Text>
+                <Tags item={it} size={clamp(scale * 0.26, 7, 11)} />
+              </View>
+              {opts.showKeys ? (
+                <Text style={{ width: keyW(scale), textAlign: "right", fontFamily: FAMILY.mono, fontWeight: 600, fontSize: scale * 0.55, color: p.key }}>{it.key ?? ""}</Text>
+              ) : null}
+            </View>
+          ))}
+        </View>
+        <Footer />
+      </Page>
+    );
+  };
+
+  // --- compact -----------------------------------------------------------
+  // Every set in one tight column; flows onto more pages only when it has to.
+
+  const CompactPage = () => (
+    <Page size={size} style={s.page}>
+      <Haze />
+      <View style={{ borderBottomWidth: 1.4, borderBottomColor: p.ruleStrong, paddingBottom: 8, marginBottom: 10 }}>
+        <Text style={[s.eyebrow, { color: p.accent, marginBottom: 3 }]}>Set list</Text>
+        <Text style={{ fontFamily: FAMILY.display, fontWeight: 800, fontSize: 28, lineHeight: 1, color: p.marquee, textTransform: "uppercase", letterSpacing: 1 }}>{title}</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
+          <Text style={{ fontFamily: FAMILY.serif, fontStyle: "italic", fontSize: 10.5, color: p.ink2 }}>{subline}</Text>
+          <Text style={[s.eyebrow, { fontSize: 6.5 }]}>{statLine}</Text>
+        </View>
+      </View>
+      {sl.sets.map((set, i) => (
+        <View key={i} style={{ marginBottom: 10 }}>
+          <SetHeading name={set.name || `Set ${i + 1}`} items={set.items} size={14} />
+          {set.items.map((it, j) => (
+            <SongRow key={j} item={it} n={j + 1} scale={9.5} wide last={j === set.items.length - 1} />
+          ))}
+        </View>
+      ))}
+      <Backups size={9} />
+      <Footer />
+    </Page>
+  );
+
   const docTitle = [title, dateShort].filter(Boolean).join(" · ");
   return (
     <Document title={`${docTitle} — Set list`} author="Set list" subject="Set list" creator="Set list" producer="Set list">
       {opts.layout === "set-per-page" && sl.sets.length > 0 ? (
         sl.sets.map((_, i) => <SetPage key={i} index={i} />)
+      ) : opts.layout === "stage" && sl.sets.length > 0 ? (
+        sl.sets.map((_, i) => <StagePage key={i} index={i} />)
+      ) : opts.layout === "compact" ? (
+        <CompactPage />
+      ) : opts.layout === "plain" ? (
+        <PlainPage />
       ) : (
         <OnePage />
       )}

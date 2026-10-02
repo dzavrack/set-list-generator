@@ -132,7 +132,7 @@ function EmptyDraft({ noun }: { noun: string }) {
           <span className="label !text-neon-hot">Nothing on the stand yet</span>
         </div>
         <p className="mt-6 max-w-[18ch] font-serif text-[40px] leading-[1.02] tracking-[-0.01em] text-ink sm:text-[52px]">
-          Tell it about the gig. It&rsquo;ll hand you the night.
+          Tell it about the gig.
         </p>
         <p className="mt-4 max-w-md text-[15px] text-ink-2">
           Describe it the way you&rsquo;d text the band. The builder turns that into sets from your repertoire, with backups ready.
@@ -524,7 +524,7 @@ export function BuildView() {
               </div>
               <BuilderNotes notes={draft.notes} />
               <SetListEditor setList={draft} onChange={setDraft} songs={songs} byId={byId} genre={genre} rep={rep} rules={rules} onOpenSong={setOpenSong} />
-              <ExportDialog setList={draft} songs={byId} open={exporting} onClose={() => setExporting(false)} />
+              <ExportDialog setList={draft} songs={byId} open={exporting} onClose={() => setExporting(false)} onSetListChange={setDraft} />
             </div>
           ) : !loading && known === 0 ? (
             <NothingKnown noun={noun} />

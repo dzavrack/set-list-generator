@@ -282,7 +282,7 @@ function SetListDetail({
 
       <BuilderNotes notes={setList.notes} />
       <SetListEditor setList={setList} onChange={onChange} songs={songs} byId={byId} genre={genre} rep={rep} rules={rules} onOpenSong={setOpenSong} />
-      <ExportDialog setList={setList} songs={byId} open={exporting} onClose={() => setExporting(false)} />
+      <ExportDialog setList={setList} songs={byId} open={exporting} onClose={() => setExporting(false)} onSetListChange={onChange} />
       <SongSheet song={openSong} genre={genre} onClose={() => setOpenSong(null)} />
     </div>
   );

@@ -15,7 +15,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ChevronDown, GripVertical, Plus, TriangleAlert, X } from "lucide-react";
+import { ChevronDown, GripVertical, Hand, Plus, TriangleAlert, X } from "lucide-react";
 import type { GenreConfig, GigSet, Repertoire, Rules, SetItem, SetList, Song } from "@/lib/types";
 import { checkSet, planShape, retime, setMinutes } from "@/lib/engine";
 import { Card } from "@/components/ui/Page";
@@ -44,6 +44,8 @@ interface RowProps {
   warn?: string;
   onRemove?: () => void;
   onOpen?: () => void;
+  /** Mark / unmark as a request; exports print "request" on marked songs. */
+  onToggleRequest?: () => void;
   handle?: React.HTMLAttributes<HTMLButtonElement>;
   overlay?: boolean;
   ghost?: boolean;
@@ -51,9 +53,10 @@ interface RowProps {
 }
 
 /** A song in a set. Purely presentational: the sortable wrapper and the drag overlay both render it. */
-const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, warn, onRemove, onOpen, handle, overlay, ghost, style }, ref) {
+const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, warn, onRemove, onOpen, onToggleRequest, handle, overlay, ghost, style }, ref) {
   const shaky = item.flags?.includes("shaky");
   const other = item.flags?.includes("other-style");
+  const request = item.flags?.includes("request");
   const mins = Math.round(item.minutes);
   return (
     <li
@@ -86,9 +89,10 @@ const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, 
             </span>
           )}
         </span>
-        {(item.feel || shaky || other) ? (
+        {(item.feel || shaky || other || request) ? (
           <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted">
             {item.feel && <span className="mr-0.5">{item.feel}</span>}
+            {request && <StyleTag tone="accent">Request</StyleTag>}
             {shaky && <StyleTag tone="shaky">Shaky</StyleTag>}
             {other && <StyleTag>Other style</StyleTag>}
             <span className="tabular font-mono text-[11.5px] text-faint sm:hidden">{mins}′</span>
@@ -97,6 +101,21 @@ const RowView = forwardRef<HTMLLIElement, RowProps>(function RowView({ item, n, 
           <span className="tabular mt-0.5 block font-mono text-[11.5px] text-faint sm:hidden">{mins}′</span>
         )}
       </button>
+      {onToggleRequest && (
+        <button
+          type="button"
+          onClick={onToggleRequest}
+          aria-pressed={!!request}
+          aria-label={request ? `${item.title} is a request. Unmark it` : `Mark ${item.title} as a request`}
+          title={request ? "Request (prints on exports). Click to unmark" : "Mark as a request"}
+          className={cx(
+            "grid h-10 w-9 shrink-0 place-items-center rounded-lg transition-colors sm:h-9",
+            request ? "text-neon-hot" : "text-faint opacity-60 hover:text-ink sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100",
+          )}
+        >
+          <Hand className="h-4 w-4" strokeWidth={1.75} />
+        </button>
+      )}
       {item.key && <span className="shrink-0 rounded-md border border-line-strong px-1.5 py-px font-mono text-[11px] text-ink-2">{item.key}</span>}
       <span className="tabular hidden w-9 shrink-0 text-right font-mono text-xs text-muted sm:block">{mins}′</span>
       {onRemove ? (
@@ -316,6 +335,15 @@ export function SetListEditor({
     commit(next);
   };
 
+  const toggleRequest = (list: number, index: number) => {
+    const next = lists.map((l) => l.slice());
+    const it = next[list][index];
+    const flags = it.flags ?? [];
+    const on = flags.includes("request");
+    next[list][index] = { ...it, flags: on ? flags.filter((f) => f !== "request") : [...flags, "request"] };
+    commit(next);
+  };
+
   const inNight = useMemo(() => new Set(lists.flat().map((i) => i.songId)), [lists]);
   const add = (list: number, s: Song) => {
     const e = rep[s.id];
@@ -381,6 +409,13 @@ export function SetListEditor({
   return (
     <DndContext accessibility={accessibility} sensors={sensors} collisionDetection={closestCenter} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} onDragCancel={() => setActive(null)}>
       <div className="@container flex flex-col gap-5">
+        <p className="flex items-start gap-2 text-[13px] text-muted">
+          <Hand className="mt-0.5 h-4 w-4 shrink-0 text-ink-2" strokeWidth={1.75} aria-hidden />
+          <span>
+            Taking a request? Click the hand on a {noun} to mark it as one (on a computer, hover over the row to see it). Requests print
+            &ldquo;request&rdquo; next to the title on the PDF and text exports. Click it again to unmark.
+          </span>
+        </p>
         <div className={cx("grid items-start gap-5", setList.sets.length > 1 && "@3xl:grid-cols-2", setList.sets.length > 2 && "@7xl:grid-cols-3")}>
           {setList.sets.map((set, si) => (
             <Card key={si} aria-label={set.name} role="region" className="min-w-0">
@@ -396,6 +431,7 @@ export function SetListEditor({
                      
                       warn={rowWarn.get(it.songId)}
                       onRemove={() => remove(si, ii)}
+                      onToggleRequest={() => toggleRequest(si, ii)}
                       onOpen={open(it)}
                     />
                   ))}

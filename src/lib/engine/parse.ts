@@ -4,7 +4,7 @@ import { SETTINGS } from "../types";
 import { defaultRules } from "./rules";
 import { planShape } from "./shape";
 import {
-  decadeLabel, isJazz, isoToUtc, nouns, normTitle, shortDate, splitStyles, TEMPO_LABELS, utcToIso, weekdayName,
+  decadeLabel, isJazz, isoToUtc, longDate, nouns, normTitle, shortDate, splitStyles, TEMPO_LABELS, utcToIso,
 } from "./util";
 
 /** The engine accepts a few extra request fields that aren't (yet) in the shared type. */
@@ -241,19 +241,13 @@ export function describeRequest(req: GigRequest, genre: GenreConfig, rules?: Rul
   return parts.join(" · ");
 }
 
-const JAZZ_SHORT: Record<string, string> = {
-  gy: "Gypsy", tr: "Trad", sw: "Swing", sb: "Standards", bp: "Bebop", hb: "Hard Bop", md: "Modern",
-  la: "Latin", bl: "Ballads", bu: "Blues", wz: "Waltzes", po: "Pop", xm: "Holiday",
-};
-
-/** Default set-list name, e.g. "Friday Ballads & Standards Gig" or "Saturday '80s Classic rock Gig". */
-export function autoName(req: GigRequest, genre: GenreConfig): string {
-  const jazz = isJazz(genre);
-  const day = req.date ? weekdayName(req.date) : "";
-  const { styles } = splitStyles(req.styles || [], genre);
-  const sty = styles.length
-    ? styles.map((c) => (jazz ? JAZZ_SHORT[c] || genre.styles[c] || c : String(genre.styles[c] || c).split(/ & | \//)[0])).join(" & ")
-    : jazz ? "Mixed" : genre.name;
-  const dec = (req.decades || []).map((d) => (d === "pre" ? "Old-Time" : decadeLabel(d))).join(" & ");
-  return [day, dec, sty, req.count ? nouns(genre).Many : "Gig"].filter(Boolean).join(" ");
+/**
+ * Default set-list name. Plain, never the styles. Always "Set List", unless the gig has both a
+ * date and a venue: "Friday, Oct 2 · The Blue Note Set List".
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- genre kept so callers needn't change
+export function autoName(req: GigRequest, genre?: GenreConfig): string {
+  const venue = req.venue?.trim();
+  if (!req.date || !venue) return "Set List";
+  return `${longDate(req.date)} · ${venue} Set List`;
 }
