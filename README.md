@@ -4,6 +4,8 @@
 
 ![Build a set](docs/build-a-set.png)
 
+**[Try the live demo →](https://dzavrack.github.io/set-list-generator/)** The Jazz Book opens with a starter repertoire of about 200 tunes already sorted, so you can go straight to *Build a set*.
+
 The Jazz Book holds **1,114 standards** tagged by style (swing, bebop, ballads, bossa, gypsy jazz, trad, modal and more). There are 11 other genre books, about 4,500 songs in all. It's a static Next.js + TypeScript app with no backend and no account; everything is saved in your browser.
 
 ## How it works
